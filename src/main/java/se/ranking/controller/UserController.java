@@ -1,9 +1,11 @@
 package se.ranking.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.ranking.model.Qualifier;
+import org.springframework.web.server.ResponseStatusException;
+import se.ranking.exception.NotFoundException;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.service.UserService;
@@ -24,9 +26,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable("id") Long id) throws Exception {
-        User user = userService.findById(id);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<?> getUser(@PathVariable("id") Long id) throws NotFoundException {
+        User user;
+        try {
+            user = userService.findById(id);
+            return ResponseEntity.ok(user);
+        } catch(NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found", e);
+        }
     }
 
     @GetMapping("/all")

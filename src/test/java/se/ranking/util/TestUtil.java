@@ -1,67 +1,82 @@
 package se.ranking.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import se.ranking.model.Competition;
 import se.ranking.model.Result;
 import se.ranking.model.User;
-import se.ranking.repository.CompetitionRepository;
-import se.ranking.repository.ResultRepository;
-import se.ranking.repository.UserRepository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TestUtil {
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    CompetitionRepository competitionRepository;
-
-    @Autowired
-    ResultRepository resultRepository;
-
-    public void createXusers(int x) {
-        IntStream.range(0, x)
-                .forEach(i -> userRepository.save(createUser(i)));
+    public List<User> createXUsers(int x, final List<Result> results) {
+        return IntStream.range(0, x)
+                .mapToObj(i -> createUser(i, results))
+                .collect(Collectors.toList());
     }
 
-    public User createUser(int i) {
+    public User createUser(int i, List<Result> results) {
         User user = new User();
+        user.setId((long) i);
         user.setFirstName("firstName"+i);
         user.setLastName("lastName"+i);
         user.setEmail("test"+i+"@mail.com");
         user.setPassword("password");
         user.setGender(i % 2 == 0 ? "Male" : "Female");
+        user.setResults(results);
         return user;
     }
 
-    public void createXEvents(int x) {
-        IntStream.range(0, x)
-                .forEach(i -> competitionRepository.save(createEvent(i)));
+    public List<Competition> createXCompetitions(int x, List<User> users) {
+        return IntStream.range(0, x)
+                .mapToObj(i -> createCompetition(x, users))
+                .collect(Collectors.toList());
     }
 
-    public Competition createEvent(int i) {
+    public Competition createCompetition(int i, List<User> users) {
         Competition competition = new Competition();
+        competition.setId((long) i);
+        competition.setName("SM i Angered Simhall"+i);
         competition.setDate(LocalDate.now().toString());
-        competition.setDicipline("STA"+i);
-        competition.setUsers(userRepository.findAll());
+        competition.setEndDate(datePlusOneDay());
+        competition.setCountry("Sweden");
+        competition.setEventType("SM");
+        competition.setLocation("Angered Simhall");
         return competition;
     }
 
-    public void createXResults(int x) {
-        IntStream.range(0, x)
-                .forEach(i -> resultRepository.save(createResult(i)));
+    private String datePlusOneDay() {
+        String date = LocalDate.now().toString();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(simpleDateFormat.parse(date));
+        } catch(ParseException e) {
+            // Log
+        }
+        c.add(Calendar.DATE, 1);
+        return simpleDateFormat.format(c.getTime());
     }
 
-    public Result createResult(int x) {
+    public List<Result> createXResults(int x, final User user) {
+        return IntStream.range(0, x)
+                .mapToObj(i -> createResult(i, user))
+                .collect(Collectors.toList());
+    }
+
+    public Result createResult(int x, User user) {
         Result result = new Result();
+        result.setId((long) x);
         result.setDiscipline("STA");
         result.setAnnouncedPerformance(randomTimeAndPoints());
         result.setCard(card(x));
         result.setPoints(Integer.parseInt(randomTimeAndPoints()));
-        result.setUser(userRepository.findById((long) x).get());
+        result.setUser(user);
         result.setReportedPerformance(randomTimeAndPoints());
         return result;
     }

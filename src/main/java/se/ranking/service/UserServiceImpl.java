@@ -3,6 +3,7 @@ package se.ranking.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.ranking.exception.NotFoundException;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.repository.UserRepository;
@@ -17,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) throws Exception {
-        return userRepository.findById(id).orElseThrow(Exception::new);
+        return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override

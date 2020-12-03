@@ -27,9 +27,7 @@ class CompetitionControllerTest {
     public void Setup(){
         testUtil = new TestUtil();
 
-        testUtil.createXusers(10);
-        testUtil.createResult(10);
-        testUtil.createXEvents(3);
+
     }
 
     @Test
