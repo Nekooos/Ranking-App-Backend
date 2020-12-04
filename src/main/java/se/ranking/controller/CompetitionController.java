@@ -28,9 +28,9 @@ public class CompetitionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllEvents() {
+    public ResponseEntity<?> getAllCompetitions() {
         List<Competition> competitions = competitionService.findAll();
-        return ResponseEntity.ok(competitions);
+        return ResponseEntity.ok().body(competitions);
     }
 
     @PutMapping("/put/{id}")

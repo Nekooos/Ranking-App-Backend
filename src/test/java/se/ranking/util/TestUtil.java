@@ -34,7 +34,7 @@ public class TestUtil {
 
     public List<Competition> createXCompetitions(int x, List<User> users) {
         return IntStream.range(0, x)
-                .mapToObj(i -> createCompetition(x, users))
+                .mapToObj(i -> createCompetition(i+1, users))
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +65,7 @@ public class TestUtil {
 
     public List<Result> createXResults(int x, final User user) {
         return IntStream.range(0, x)
-                .mapToObj(i -> createResult(i, user))
+                .mapToObj(i -> createResult(i+1, user))
                 .collect(Collectors.toList());
     }
 
