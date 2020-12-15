@@ -14,28 +14,37 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class UtilServiceImpl<T> implements UtilService<T>{
-
-    @Override
-    public List<T> combineLists(List<T> list1, List<T> list2) {
-        return Stream.concat(list1.stream(), list2.stream())
-                .collect(Collectors.toList());
-    }
+public class UtilServiceImpl implements UtilService{
 
     public double convertStaticApneaTimeToPoints(String time) {
-        int seconds = convertStringToSeconds(time);
-        return roundToHalf(seconds * 0.2);
+        double seconds = convertStringToSeconds(time);
+        return roundDownToZeroPointTwo(seconds * 0.2);
     }
 
-    private int convertStringToSeconds(String time) {
-        String[] timeUnits = time.split(":");
+    public double convertConstantWeightMetersToPoints(String meters) {
+        return Double.parseDouble(meters);
+    }
+
+    public double convertDynamicApneaMetersToPoints(String meters) {
+        return roundToHalf(Double.parseDouble(meters) * 0.5);
+    }
+
+    private double convertStringToSeconds(String time) {
+        String[] timeUnits = time.split("[:,]");
+        String[] timeUnitsMilliSeconds = time.split(",");
+
         int minutes = Integer.parseInt(timeUnits[0]);
         int seconds = Integer.parseInt(timeUnits[1]);
-        return minutes * 60 + seconds;
+        int milliseconds = Integer.parseInt(timeUnitsMilliSeconds[1]);
+        return minutes * 60.0 + seconds + milliseconds / 10.0;
     }
 
     private double roundToHalf(double value) {
         return Math.round(value * 2) / 2.0;
+    }
+
+    private double roundDownToZeroPointTwo(double value) {
+        return Math.round(value * 5.0) / 5.0;
     }
 
     /*
@@ -51,6 +60,5 @@ public class UtilServiceImpl<T> implements UtilService<T>{
         5’04” in static apnea = 60.8 points
         55.5m in constant weight = 55.0 points
         97.8m in dynamic apnea = 48.5 points
-        3.2.6 Determining the winner of an event
      */
 }

@@ -6,7 +6,8 @@ import com.github.fge.jsonpatch.JsonPatchException;
 
 import java.util.List;
 
-public interface UtilService<T> {
-    List<T> combineLists(List<T> list1, List<T> list2);
+public interface UtilService {
     double convertStaticApneaTimeToPoints(String time);
+    double convertConstantWeightMetersToPoints(String meters);
+    double convertDynamicApneaMetersToPoints(String meters);
 }

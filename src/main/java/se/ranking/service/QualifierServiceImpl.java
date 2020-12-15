@@ -21,7 +21,7 @@ public class QualifierServiceImpl implements QualifierService {
     QualifierRepository qualifierRepository;
 
     @Autowired
-    UtilService<Qualifier> utilService;
+    UtilService utilService;
 
     @Override
     public Qualifier findById(Long id) throws NotFoundException{
