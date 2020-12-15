@@ -9,8 +9,8 @@ public class Qualifier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String timeToQualify;
-    @ManyToOne(targetEntity = User.class)
+    private double valueToQualify;
+    @ManyToMany(targetEntity = User.class)
     private List<User> users;
 
     public Long getId() {
@@ -29,19 +29,19 @@ public class Qualifier {
         this.name = name;
     }
 
-    public String getTimeToQualify() {
-        return timeToQualify;
-    }
-
-    public void setTimeToQualify(String timeToQualify) {
-        this.timeToQualify = timeToQualify;
-    }
-
     public List<User> getUsers() {
         return users;
     }
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public double getValueToQualify() {
+        return valueToQualify;
+    }
+
+    public void setValueToQualify(double valueToQualify) {
+        this.valueToQualify = valueToQualify;
     }
 }

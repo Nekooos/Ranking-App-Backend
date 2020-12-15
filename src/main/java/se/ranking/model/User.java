@@ -28,7 +28,7 @@ public class User {
     @NotNull
     private String gender;
 
-    @ManyToMany(targetEntity = Competition.class)
+    @ManyToMany(mappedBy = "users")
     List<Competition> competitions;
 
     @JsonManagedReference

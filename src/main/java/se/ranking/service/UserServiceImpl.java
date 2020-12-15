@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     public User edit(Long id, User user) throws Exception {
         User targetUser = this.findById(id);
         BeanUtils.copyProperties(user, targetUser, String.valueOf(id));
+        userRepository.save(targetUser);
         return user;
     }
 

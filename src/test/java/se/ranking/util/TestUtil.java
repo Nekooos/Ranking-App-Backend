@@ -1,15 +1,14 @@
 package se.ranking.util;
 
 import se.ranking.model.Competition;
+import se.ranking.model.Qualifier;
 import se.ranking.model.Result;
 import se.ranking.model.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -73,17 +72,17 @@ public class TestUtil {
         Result result = new Result();
         result.setId((long) x);
         result.setDiscipline("STA");
-        result.setAnnouncedPerformance(randomTimeAndPoints());
+        result.setAnnouncedPerformance(String.valueOf(randomTimeAndPoints()));
         result.setCard(card(x));
-        result.setPoints(Integer.parseInt(randomTimeAndPoints()));
+        result.setPoints(randomTimeAndPoints());
         result.setUser(user);
-        result.setReportedPerformance(randomTimeAndPoints());
+        result.setReportedPerformance(String.valueOf(randomTimeAndPoints()));
         return result;
     }
 
-    private String randomTimeAndPoints() {
+    private int randomTimeAndPoints() {
         Random random = new Random();
-        return String.valueOf(random.nextInt(100)+1);
+        return random.nextInt(100)+1;
     }
 
     private String card(int i) {
@@ -97,4 +96,12 @@ public class TestUtil {
         }
     }
 
+    public Qualifier createQualifier() {
+        Qualifier qualifier = new Qualifier();
+        qualifier.setId(1L);
+        qualifier.setName("qualifier");
+        qualifier.setUsers(Collections.emptyList());
+        qualifier.setValueToQualify(5.5);
+        return qualifier;
+    }
 }

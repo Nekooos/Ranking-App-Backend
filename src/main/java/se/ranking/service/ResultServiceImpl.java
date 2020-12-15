@@ -34,7 +34,8 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public Result edit(Long id, Result result) {
-        Result targetResult = this.findById(id);
+        Result targetResult = resultRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
         BeanUtils.copyProperties(result, targetResult, String.valueOf(id));
         return result;
     }

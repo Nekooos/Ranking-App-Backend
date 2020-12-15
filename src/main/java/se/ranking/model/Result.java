@@ -13,7 +13,7 @@ public class Result {
     private String discipline;
     private String reportedPerformance;
     private String announcedPerformance;
-    private int points;
+    private double points;
     private String card;
     private String remarks;
     private int day;
@@ -36,6 +36,14 @@ public class Result {
         this.id = id;
     }
 
+    public String getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
+    }
+
     public String getReportedPerformance() {
         return reportedPerformance;
     }
@@ -52,19 +60,11 @@ public class Result {
         this.announcedPerformance = announcedPerformance;
     }
 
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
-
-    public int getPoints() {
+    public double getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(double points) {
         this.points = points;
     }
 
@@ -76,28 +76,12 @@ public class Result {
         this.card = card;
     }
 
-    public User getUser() {
-        return user;
+    public String getRemarks() {
+        return remarks;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getDiscipline() {
-        return discipline;
-    }
-
-    public void setDiscipline(String discipline) {
-        this.discipline = discipline;
-    }
-
-    public Competition getCompetition() {
-        return competition;
-    }
-
-    public void setCompetition(Competition competition) {
-        this.competition = competition;
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public int getDay() {
@@ -106,5 +90,21 @@ public class Result {
 
     public void setDay(int day) {
         this.day = day;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Competition getCompetition() {
+        return competition;
+    }
+
+    public void setCompetition(Competition competition) {
+        this.competition = competition;
     }
 }

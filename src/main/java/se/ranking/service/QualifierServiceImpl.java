@@ -1,11 +1,16 @@
 package se.ranking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
+import se.ranking.model.User;
 import se.ranking.repository.QualifierRepository;
 
 import java.util.List;
@@ -14,6 +19,9 @@ import java.util.List;
 public class QualifierServiceImpl implements QualifierService {
     @Autowired
     QualifierRepository qualifierRepository;
+
+    @Autowired
+    UtilService<Qualifier> utilService;
 
     @Override
     public Qualifier findById(Long id) throws NotFoundException{
@@ -33,8 +41,10 @@ public class QualifierServiceImpl implements QualifierService {
 
     @Override
     public Qualifier edit(Long id, Qualifier qualifier) {
-        Qualifier targetQualifier = this.findById(id);
+        Qualifier targetQualifier = qualifierRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
         BeanUtils.copyProperties(qualifier, targetQualifier, String.valueOf(id));
+        qualifierRepository.save(targetQualifier);
         return qualifier;
     }
 
@@ -42,5 +52,17 @@ public class QualifierServiceImpl implements QualifierService {
     public Qualifier delete(Qualifier qualifier) {
         qualifierRepository.delete(qualifier);
         return qualifier;
+    }
+
+    @Override
+    public Qualifier patchQualifier(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
+        Qualifier qualifier = qualifierRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode patched = jsonPatch.apply(objectMapper.convertValue(qualifier, JsonNode.class));
+        Qualifier patchedQualifier = objectMapper.treeToValue(patched, Qualifier.class);
+
+        return qualifierRepository.save(patchedQualifier);
     }
 }

@@ -6,9 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import se.ranking.model.Competition;
+import se.ranking.model.Qualifier;
 import se.ranking.model.Result;
 import se.ranking.model.User;
 import se.ranking.repository.CompetitionRepository;
+import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.ResultRepository;
 import se.ranking.repository.UserRepository;
 import se.ranking.service.CompetitionService;
@@ -16,6 +18,7 @@ import se.ranking.service.ResultService;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -30,7 +33,7 @@ public class RankingApplication {
 
 	//testdata
 	@Bean
-	CommandLineRunner init (UserRepository userRepository, CompetitionRepository competitionRepository, ResultRepository resultRepository, CompetitionService competitionService, ResultService resultService){
+	CommandLineRunner init (UserRepository userRepository, CompetitionRepository competitionRepository, ResultRepository resultRepository, CompetitionService competitionService, ResultService resultService, QualifierRepository qualifierRepository){
 		return args -> {
 			IntStream.range(0, 8)
 					.forEach(i -> userRepository.save(createUser(i)));
@@ -42,6 +45,8 @@ public class RankingApplication {
 					.forEach(i -> resultRepository.save(createResult(i, userRepository, competitionRepository)));
 
 			//resultRepository.getUserAndResultByCompetitionId(1L).forEach(r -> System.out.println(r.getCard()+"\t"+r.getAnnounced_performance()+"\t"+r.getFirst_name()));
+
+			createQualifier(userRepository, qualifierRepository);
 		};
 
 	}
@@ -86,12 +91,12 @@ public class RankingApplication {
 	public static Result createResult(int x, UserRepository userRepository, CompetitionRepository competitionRepository) {
 		Result result = new Result();
 		result.setDiscipline(x % 2 == 0 ? "STA" : "FEN");
-		result.setAnnouncedPerformance(randomTimeAndPoints());
+		result.setAnnouncedPerformance(String.valueOf(randomTimeAndPoints()));
 		result.setCard(card(x));
-		result.setPoints(Integer.parseInt(randomTimeAndPoints()));
+		result.setPoints(randomTimeAndPoints());
 		result.setUser(userRepository.findById((long) x+1).get());
 		result.setCompetition(competitionRepository.findById(1L).get());
-		result.setReportedPerformance(randomTimeAndPoints());
+		result.setReportedPerformance(String.valueOf(randomTimeAndPoints()));
 		result.setRemarks("remark");
 		result.setDay(x % 2 == 0 ? 1 : 2);
 		return result;
@@ -103,9 +108,18 @@ public class RankingApplication {
 		users.forEach(user -> user.setResults(Arrays.asList()));
 	}
 
-	private static String randomTimeAndPoints() {
+	public static void createQualifier(UserRepository userRepository, QualifierRepository qualifierRepository) {
+		Qualifier qualifier = new Qualifier();
+		qualifier.setName("qualifier1");
+		qualifier.setValueToQualify(5.05);
+		qualifier.setId(1L);
+		qualifier.setUsers(Collections.emptyList());
+		qualifierRepository.save(qualifier);
+	}
+
+	private static double randomTimeAndPoints() {
 		Random random = new Random();
-		return String.valueOf(random.nextInt(100)+1);
+		return random.nextInt(100)+1;
 	}
 
 	private static String card(int i) {

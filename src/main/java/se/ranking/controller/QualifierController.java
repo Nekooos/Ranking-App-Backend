@@ -1,10 +1,15 @@
 package se.ranking.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
-import se.ranking.model.Result;
+import se.ranking.model.User;
 import se.ranking.service.QualifierService;
 
 import java.util.List;
@@ -40,8 +45,23 @@ public class QualifierController {
         return ResponseEntity.ok().body(qualifier);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteQualifier(@RequestBody Qualifier qualifier) {
+    /**
+     * "Content-Type: application/json-patch+json"
+     */
+    @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<?> addUserToQualifier(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
+        try {
+            Qualifier qualifier = qualifierService.patchQualifier(jsonPatch, id);
+            return ResponseEntity.ok().body(qualifier);
+        } catch (JsonPatchException |JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteQualifier(@RequestBody Qualifier qualifier, @PathVariable("id") Long id) {
         qualifierService.delete(qualifier);
         return ResponseEntity.ok().body(qualifier.getName() + " was deleted");
     }
