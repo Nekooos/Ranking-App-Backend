@@ -104,13 +104,4 @@ public class TestUtil {
         qualifier.setValueToQualify(5.5);
         return qualifier;
     }
-
-    public Qualifier createPatchedQualifier() {
-        Qualifier qualifier = new Qualifier();
-        qualifier.setId(1L);
-        qualifier.setName("patchedQualifier");
-        qualifier.setUsers(Collections.emptyList());
-        qualifier.setValueToQualify(5.5);
-        return qualifier;
-    }
 }
