@@ -28,10 +28,11 @@ public class User {
     @NotNull
     private String gender;
 
+    @JsonManagedReference(value = "competitions")
     @ManyToMany(mappedBy = "users")
     List<Competition> competitions;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "results")
     @OneToMany(fetch= FetchType.LAZY, mappedBy = "user")
     List<Result> results;
 

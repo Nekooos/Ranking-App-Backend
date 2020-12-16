@@ -18,7 +18,7 @@ public class Result {
     private String remarks;
     private int day;
 
-    @JsonBackReference
+    @JsonBackReference(value = "user")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

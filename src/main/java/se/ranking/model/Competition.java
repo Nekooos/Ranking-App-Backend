@@ -1,5 +1,6 @@
 package se.ranking.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class Competition {
     private String eventType;
     private String day;
 
+    @JsonBackReference(value = "users")
     @ManyToMany(targetEntity = User.class)
     private List<User> users;
 
