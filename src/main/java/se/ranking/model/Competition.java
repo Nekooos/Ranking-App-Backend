@@ -20,12 +20,11 @@ public class Competition {
     private String eventType;
     private String day;
 
-    @JsonBackReference(value = "users")
     @ManyToMany(targetEntity = User.class)
     private List<User> users;
 
     @JsonManagedReference(value = "competition")
-    @ManyToOne(targetEntity = Result.class)
+    @OneToMany(targetEntity = Result.class)
     private List<Result> results;
 
     public Long getId() {

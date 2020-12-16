@@ -1,5 +1,6 @@
 package se.ranking.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -28,11 +29,10 @@ public class User {
     @NotNull
     private String gender;
 
-    @JsonManagedReference(value = "competitions")
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(targetEntity = Competition.class)
     List<Competition> competitions;
 
-    @JsonManagedReference(value = "results")
+    @JsonManagedReference
     @OneToMany(fetch= FetchType.LAZY, mappedBy = "user")
     List<Result> results;
 
