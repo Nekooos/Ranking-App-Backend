@@ -1,7 +1,9 @@
 package se.ranking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import se.ranking.model.CompetitionResultDto;
-import se.ranking.model.Qualifier;
 import se.ranking.model.Result;
 
 import java.util.List;
@@ -13,4 +15,5 @@ public interface ResultService {
     Result edit(Long id, Result result);
     Result delete(Result result);
     List<CompetitionResultDto> getCompetitionResultsById(Long id);
+    Result patchResult(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
 }

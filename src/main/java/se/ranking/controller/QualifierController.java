@@ -49,7 +49,7 @@ public class QualifierController {
      * "Content-Type: application/json-patch+json"
      */
     @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<?> addUserToQualifier(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
+    public ResponseEntity<?> patchQualifier(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
         try {
             Qualifier qualifier = qualifierService.patchQualifier(jsonPatch, id);
             return ResponseEntity.ok().body(qualifier);

@@ -1,9 +1,16 @@
 package se.ranking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.ranking.exception.NotFoundException;
 import se.ranking.model.Competition;
+import se.ranking.model.Qualifier;
 import se.ranking.repository.CompetitionRepository;
 
 import java.util.List;
@@ -41,5 +48,17 @@ public class CompetitionServiceImpl implements CompetitionService {
     public Competition delete(Competition competition) {
         competitionRepository.delete(competition);
         return competition;
+    }
+
+    @Override
+    public Competition patchCompetition(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
+        Competition competition = competitionRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode patched = jsonPatch.apply(objectMapper.convertValue(competition, JsonNode.class));
+        Competition patchedCompetition = objectMapper.treeToValue(patched, Competition.class);
+
+        return competitionRepository.save(patchedCompetition);
     }
 }

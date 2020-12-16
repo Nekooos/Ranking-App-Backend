@@ -1,8 +1,14 @@
 package se.ranking.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.ranking.exception.NotFoundException;
+import se.ranking.model.Competition;
 import se.ranking.model.CompetitionResultDto;
 import se.ranking.model.Result;
 import se.ranking.service.ResultService;
@@ -51,5 +57,17 @@ public class ResultController {
         Result result = resultService.findById(id);
         resultService.delete(result);
         return ResponseEntity.ok().body(result);
+    }
+
+    @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<?> patchResult(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
+        try {
+            Result result = resultService.patchResult(jsonPatch, id);
+            return ResponseEntity.ok().body(result);
+        } catch (JsonPatchException | JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

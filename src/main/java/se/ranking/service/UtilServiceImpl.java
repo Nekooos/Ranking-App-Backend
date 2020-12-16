@@ -30,8 +30,8 @@ public class UtilServiceImpl implements UtilService{
     }
 
     private double convertStringToSeconds(String time) {
-        String[] timeUnits = time.split("[:,]");
-        String[] timeUnitsMilliSeconds = time.split(",");
+        String[] timeUnits = time.split("[:.]");
+        String[] timeUnitsMilliSeconds = time.split("\\.");
 
         int minutes = Integer.parseInt(timeUnits[0]);
         int seconds = Integer.parseInt(timeUnits[1]);

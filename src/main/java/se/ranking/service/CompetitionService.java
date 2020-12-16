@@ -1,5 +1,8 @@
 package se.ranking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import se.ranking.model.Competition;
 import se.ranking.model.Qualifier;
 
@@ -11,4 +14,5 @@ public interface CompetitionService {
     List<Competition> findAll();
     Competition edit(Long id, Competition competition) throws Exception;
     Competition delete(Competition competition);
+    Competition patchCompetition(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
 }

@@ -1,9 +1,15 @@
 package se.ranking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
+import se.ranking.model.Result;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.repository.UserRepository;
@@ -44,6 +50,18 @@ public class UserServiceImpl implements UserService {
     public User delete(User user) {
         userRepository.delete(user);
         return user;
+    }
+
+    @Override
+    public User patchUser(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
+        User user = userRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode patched = jsonPatch.apply(objectMapper.convertValue(user, JsonNode.class));
+        User patchedUser = objectMapper.treeToValue(patched, User.class);
+
+        return userRepository.save(patchedUser);
     }
 
     private User createUserFromUserDto(UserDto userdto) {

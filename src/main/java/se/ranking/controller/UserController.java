@@ -1,11 +1,15 @@
 package se.ranking.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import se.ranking.exception.NotFoundException;
+import se.ranking.model.Result;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.service.UserService;
@@ -52,5 +56,17 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@RequestBody User user) {
         userService.delete(user);
         return ResponseEntity.ok().body(user.getFirstName() + " " + user.getLastName() + " was deleted");
+    }
+
+    @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<?> patchUser(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
+        try {
+            User user = userService.patchUser(jsonPatch, id);
+            return ResponseEntity.ok().body(user);
+        } catch (JsonPatchException | JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

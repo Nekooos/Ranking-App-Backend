@@ -15,7 +15,7 @@ public class UtilServiceTests {
 
     @Test
     public void convertStaticApneaTimeToPoints() {
-        String value = "4:33,5";
+        String value = "4:33.5";
         double points = utilService.convertStaticApneaTimeToPoints(value);
         Assertions.assertEquals(54.8, points);
     }
@@ -33,5 +33,4 @@ public class UtilServiceTests {
         double points = utilService.convertDynamicApneaMetersToPoints(value);
         Assertions.assertEquals(27.5, points);
     }
-
 }

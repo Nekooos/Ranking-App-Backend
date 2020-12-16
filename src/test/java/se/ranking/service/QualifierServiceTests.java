@@ -39,6 +39,8 @@ public class QualifierServiceTests {
     public void patchQualifier() throws JsonPatchException, IOException {
         Qualifier qualifier = testUtil.createQualifier();
 
+        Assertions.assertEquals("qualifier", qualifier.getName());
+
         Mockito.when(qualifierRepository.findById(1L)).thenAnswer(arguments -> Optional.of(qualifier));
         Mockito.when(qualifierRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
 
