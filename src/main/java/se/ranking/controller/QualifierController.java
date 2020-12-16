@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
-import se.ranking.model.User;
 import se.ranking.service.QualifierService;
 
 import java.util.List;

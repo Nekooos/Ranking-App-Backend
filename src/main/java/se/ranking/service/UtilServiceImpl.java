@@ -1,17 +1,6 @@
 package se.ranking.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
-import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UtilServiceImpl implements UtilService{

@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.ranking.exception.NotFoundException;
-import se.ranking.model.Competition;
 import se.ranking.model.CompetitionResultDto;
 import se.ranking.model.Result;
 import se.ranking.service.ResultService;

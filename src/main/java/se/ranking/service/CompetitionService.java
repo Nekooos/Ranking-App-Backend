@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import se.ranking.model.Competition;
-import se.ranking.model.Qualifier;
 
 import java.util.List;
 

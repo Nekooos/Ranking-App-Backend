@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
-import se.ranking.model.User;
 import se.ranking.repository.QualifierRepository;
 
 import java.util.List;

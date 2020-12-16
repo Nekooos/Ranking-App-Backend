@@ -9,9 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
-import se.ranking.model.Competition;
 import se.ranking.model.CompetitionResultDto;
-import se.ranking.model.Qualifier;
 import se.ranking.model.Result;
 import se.ranking.repository.ResultRepository;
 

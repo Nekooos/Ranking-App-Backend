@@ -9,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
-import se.ranking.model.Result;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.repository.UserRepository;

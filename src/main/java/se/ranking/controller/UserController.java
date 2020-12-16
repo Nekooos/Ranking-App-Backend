@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import se.ranking.exception.NotFoundException;
-import se.ranking.model.Result;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.service.UserService;

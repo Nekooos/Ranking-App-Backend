@@ -5,7 +5,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import se.ranking.model.Qualifier;
-import se.ranking.model.User;
 
 import java.util.List;
 

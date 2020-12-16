@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import se.ranking.exception.NotFoundException;
-import se.ranking.model.Qualifier;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 

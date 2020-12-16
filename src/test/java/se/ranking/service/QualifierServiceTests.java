@@ -1,6 +1,5 @@
 package se.ranking.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -12,8 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.matchers.Any;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import se.ranking.model.Qualifier;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.util.TestUtil;
