@@ -1,12 +1,15 @@
 package se.ranking.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property="@UUID")
 public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +23,18 @@ public class Competition {
     private String eventType;
     private String day;
 
-    @ManyToMany(targetEntity = User.class)
+    //change to set
+    //@ManyToMany(targetEntity = User.class)
+    @ManyToMany
+    @JoinTable(
+            name = "competition_user",
+            joinColumns = {@JoinColumn(name = "competition_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
     private List<User> users;
 
     @JsonManagedReference(value = "competition")
-    @OneToMany(targetEntity = Result.class)
+    @OneToMany(mappedBy = "competition")
     private List<Result> results;
 
     public Long getId() {

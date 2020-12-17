@@ -1,8 +1,9 @@
 package se.ranking.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property="@UUID")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +24,15 @@ public class User {
     private String email;
     @JsonIgnore
     private String password;
-    @Column(nullable = false, name ="firstName")
+    @Column(nullable = false, name ="first_name")
     private String firstName;
-    @Column(nullable = false, name = "lastName")
+    @Column(nullable = false, name = "last_name")
     private String lastName;
     @NotNull
     private String gender;
 
-    @ManyToMany(targetEntity = Competition.class)
+    //change to set
+    @ManyToMany(mappedBy = "users")
     List<Competition> competitions;
 
     @JsonManagedReference
@@ -76,14 +79,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    public List<Competition> getEvents() {
-        return competitions;
-    }
-
-    public void setEvents(List<Competition> competitions) {
-        this.competitions = competitions;
-    }
-
     public List<Result> getResults() {
         return results;
     }
@@ -100,4 +95,11 @@ public class User {
         this.gender = gender;
     }
 
+    public List<Competition> getCompetitions() {
+        return competitions;
+    }
+
+    public void setCompetitions(List<Competition> competitions) {
+        this.competitions = competitions;
+    }
 }

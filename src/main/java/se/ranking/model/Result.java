@@ -3,6 +3,7 @@ package se.ranking.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Result {
@@ -10,11 +11,17 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="result_id")
     private Long id;
+    @NotNull
     private String discipline;
+    @NotNull
     private String reportedPerformance;
+    @NotNull
     private String announcedPerformance;
+    @NotNull
     private double points;
+    @NotNull
     private String card;
+    @NotNull
     private String remarks;
     private int day;
 

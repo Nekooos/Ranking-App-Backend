@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import se.ranking.controller.UserController;
 import se.ranking.model.Competition;
 import se.ranking.model.Qualifier;
 import se.ranking.model.Result;
@@ -33,7 +34,7 @@ public class RankingApplication {
 
 	//testdata
 	@Bean
-	CommandLineRunner init (UserRepository userRepository, CompetitionRepository competitionRepository, ResultRepository resultRepository, CompetitionService competitionService, ResultService resultService, QualifierRepository qualifierRepository){
+	CommandLineRunner init (UserRepository userRepository, CompetitionRepository competitionRepository, ResultRepository resultRepository, CompetitionService competitionService, ResultService resultService, QualifierRepository qualifierRepository, UserController userController){
 		return args -> {
 			IntStream.range(0, 8)
 					.forEach(i -> userRepository.save(createUser(i)));
@@ -45,8 +46,6 @@ public class RankingApplication {
 					.forEach(i -> resultRepository.save(createResult(i, userRepository, competitionRepository)));
 
 			//resultRepository.getUserAndResultByCompetitionId(1L).forEach(r -> System.out.println(r.getCard()+"\t"+r.getAnnounced_performance()+"\t"+r.getFirst_name()));
-
-			createQualifier(userRepository, qualifierRepository);
 		};
 
 	}
