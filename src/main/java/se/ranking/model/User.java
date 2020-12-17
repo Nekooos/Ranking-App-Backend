@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property="@UUID")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +31,8 @@ public class User {
     private String gender;
 
     //change to set
-    @ManyToMany(mappedBy = "users")
-    List<Competition> competitions;
+    //@ManyToMany(mappedBy = "users")
+    //List<Competition> competitions;
 
     @JsonManagedReference
     @OneToMany(fetch= FetchType.LAZY, mappedBy = "user")
@@ -95,11 +94,11 @@ public class User {
         this.gender = gender;
     }
 
-    public List<Competition> getCompetitions() {
+    /*public List<Competition> getCompetitions() {
         return competitions;
     }
 
     public void setCompetitions(List<Competition> competitions) {
         this.competitions = competitions;
-    }
+    }*/
 }

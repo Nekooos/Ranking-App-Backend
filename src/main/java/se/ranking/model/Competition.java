@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property="@UUID")
 public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
