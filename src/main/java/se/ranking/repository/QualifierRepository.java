@@ -10,8 +10,5 @@ import java.util.List;
 
 @Repository
 public interface QualifierRepository extends JpaRepository<Qualifier, Long> {
-    //@Query(value ="SELECT u.first_name, u.last_name, r. FROM users u"+
-    //"INNER JOIN result r"+
-    //"ON u.user_id = ")
-    //List<User> getQualifiedUsers(int qualificationValue);
+
 }

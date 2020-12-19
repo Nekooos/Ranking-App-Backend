@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
+import se.ranking.model.UserResultsDto;
 import se.ranking.repository.UserRepository;
 
 import java.util.List;
@@ -61,6 +62,11 @@ public class UserServiceImpl implements UserService {
         User patchedUser = objectMapper.treeToValue(patched, User.class);
 
         return userRepository.save(patchedUser);
+    }
+
+    @Override
+    public List<UserResultsDto> getUserResults(Long id) {
+        return userRepository.getUserResults(id);
     }
 
     private User createUserFromUserDto(UserDto userdto) {

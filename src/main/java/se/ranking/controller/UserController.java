@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
+import se.ranking.model.UserResultsDto;
 import se.ranking.service.UserService;
 
 import java.util.List;
@@ -21,6 +22,12 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping("/user-results/{id}")
+    public ResponseEntity<?> getUserResults(@PathVariable("id") Long id) {
+        List<UserResultsDto> userResults = userService.getUserResults(id);
+        return ResponseEntity.ok(userResults);
+    }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveUser(@RequestBody UserDto user) {

@@ -3,8 +3,10 @@ package se.ranking.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import se.ranking.model.User;
+import se.ranking.model.UserResultsDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +17,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
+    @Query(value = "SELECT new se.ranking.model.UserResultsDto "+
+            "(c.id, c.name, r.discipline) "+
+            "FROM Result r "+
+            "JOIN r.competition c "+
+            "WHERE r.userId = 1 "
+
+            //"JOIN Competition.results cr"
+    )
+    List<UserResultsDto> getUserResults(@Param("userId") Long id);
 }

@@ -25,9 +25,13 @@ public class Result {
     private String remarks;
     private int day;
 
+    @Column(insertable=false, updatable=false)
+    private Long userId;
+
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     private User user;
 
     @JsonBackReference(value = "competition")
@@ -113,5 +117,13 @@ public class Result {
 
     public void setCompetition(Competition competition) {
         this.competition = competition;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
