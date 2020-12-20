@@ -75,9 +75,9 @@ public class RankingApplication {
 
 	public static Competition createEvent(int i, UserRepository userRepository) {
 		Competition competition = new Competition();
+		competition.setName("competitionName"+i);
 		competition.setDate(LocalDate.now().toString());
 		competition.setEndDate(LocalDate.now().toString());
-		competition.setDicipline("Competition"+i);
 		competition.setCountry("Sweden");
 		competition.setCity("Göteborg");
 		competition.setLocation("Simhall");

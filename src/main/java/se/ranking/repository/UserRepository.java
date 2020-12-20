@@ -21,9 +21,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "(c.id, c.name, r.discipline) "+
             "FROM Result r "+
             "JOIN r.competition c "+
-            "WHERE r.userId = 1 "
-
-            //"JOIN Competition.results cr"
+            "WHERE r.userId = :userId"
     )
     List<UserResultsDto> getUserResults(@Param("userId") Long id);
 }
+
+/*
+SELECT * FROM RESULT
+INNER JOIN COMPETITION
+ON ID = competition_id
+WHERE user_id = 1
+ */

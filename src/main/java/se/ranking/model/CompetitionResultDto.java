@@ -7,7 +7,7 @@ public interface CompetitionResultDto {
     String getDiscipline();
     String getReported_performance();
     String getAnnounced_performance();
-    int getPoints();
+    double getPoints();
     String getCard();
     String getRemarks();
     int getDay();

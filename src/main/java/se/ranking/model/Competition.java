@@ -48,36 +48,8 @@ public class Competition {
         return name;
     }
 
-    public void setDicipline(String dicipline) {
-        this.name = dicipline;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
     }
 
     public String getCountry() {
@@ -104,6 +76,14 @@ public class Competition {
         this.location = location;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getEndDate() {
         return endDate;
     }
@@ -126,5 +106,21 @@ public class Competition {
 
     public void setDay(String day) {
         this.day = day;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Result> results) {
+        this.results = results;
     }
 }
