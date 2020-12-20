@@ -23,9 +23,8 @@ public class Result {
     private String card;
     @NotNull
     private String remarks;
-    private int day;
 
-    @Column(insertable=false, updatable=false)
+    @Column(insertable = false, updatable = false)
     private Long userId;
 
 
@@ -95,12 +94,12 @@ public class Result {
         this.remarks = remarks;
     }
 
-    public int getDay() {
-        return day;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setDay(int day) {
-        this.day = day;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public User getUser() {
@@ -117,13 +116,5 @@ public class Result {
 
     public void setCompetition(Competition competition) {
         this.competition = competition;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }

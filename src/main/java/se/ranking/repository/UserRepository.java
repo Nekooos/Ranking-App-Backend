@@ -18,14 +18,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
 
     @Query(value = "SELECT new se.ranking.model.UserResultsDto "+
-            "(c.id, c.name, r.discipline) "+
+            "(c.id, c.name, r.discipline, r.reportedPerformance, r.announcedPerformance, r.points, r.card, r.remarks) "+
             "FROM Result r "+
             "JOIN r.competition c "+
-            "WHERE r.userId = :userId"
-    )
+            "WHERE r.userId = :userId")
     List<UserResultsDto> getUserResults(@Param("userId") Long id);
 }
-
+/*
+    private String reportedPerformance;
+    private String announcedPerformance;
+    private double points;
+    private String card;
+    private String remarks;
+ */
 /*
 SELECT * FROM RESULT
 INNER JOIN COMPETITION

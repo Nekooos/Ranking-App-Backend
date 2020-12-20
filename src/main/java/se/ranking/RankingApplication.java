@@ -45,6 +45,12 @@ public class RankingApplication {
 			IntStream.range(0,8)
 					.forEach(i -> resultRepository.save(createResult(i, userRepository, competitionRepository)));
 
+			IntStream.range(0,8)
+					.forEach(i -> resultRepository.save(createResult(i, userRepository, competitionRepository)));
+
+			IntStream.range(0,8)
+					.forEach(i -> resultRepository.save(createResult(i, userRepository, competitionRepository)));
+
 			//resultRepository.getUserAndResultByCompetitionId(1L).forEach(r -> System.out.println(r.getCard()+"\t"+r.getAnnounced_performance()+"\t"+r.getFirst_name()));
 		};
 
@@ -97,7 +103,6 @@ public class RankingApplication {
 		result.setCompetition(competitionRepository.findById(1L).get());
 		result.setReportedPerformance(String.valueOf(randomTimeAndPoints()));
 		result.setRemarks("remark");
-		result.setDay(x % 2 == 0 ? 1 : 2);
 		return result;
 	}
 
