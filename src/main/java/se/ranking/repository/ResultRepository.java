@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long> {
-    @Query(value = "SELECT r.card, r.discipline, r.day, r.announced_performance, "+
+    @Query(value = "SELECT r.card, r.discipline, r.announced_performance, "+
             "r.reported_performance, r.points, r.remarks, r.result_id, u.first_name, u.last_name, u.id "+
             "FROM Users u "+
             "JOIN RESULT AS r "+

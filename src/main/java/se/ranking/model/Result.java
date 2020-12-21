@@ -27,6 +27,8 @@ public class Result {
     @Column(insertable = false, updatable = false)
     private Long userId;
 
+    @Column(insertable = false, updatable = false)
+    private Long competitionId;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,7 +37,7 @@ public class Result {
 
     @JsonBackReference(value = "competition")
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "competition_id")
+    @JoinColumn(name = "competitionId")
     private Competition competition;
 
     public Long getId() {
@@ -116,5 +118,13 @@ public class Result {
 
     public void setCompetition(Competition competition) {
         this.competition = competition;
+    }
+
+    public Long getCompetitionId() {
+        return competitionId;
+    }
+
+    public void setCompetitionId(Long competitionId) {
+        this.competitionId = competitionId;
     }
 }
