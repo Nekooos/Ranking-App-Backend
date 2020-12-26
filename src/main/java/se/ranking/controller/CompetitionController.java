@@ -20,14 +20,14 @@ public class CompetitionController {
     @Autowired
     private CompetitionService competitionService;
 
-    @PostMapping("/save")
-    public ResponseEntity<?> saveEvent(@RequestBody Competition competition) {
+    @PostMapping(value = "/save", consumes = "application/json")
+    public ResponseEntity<?> saveCompetition(@RequestBody Competition competition) {
         Competition savedCompetition = competitionService.save(competition);
         return ResponseEntity.ok(savedCompetition);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEvent(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<?> getCompetition(@PathVariable("id") Long id) throws Exception {
         Competition competition = competitionService.findById(id);
         return ResponseEntity.ok(competition);
     }

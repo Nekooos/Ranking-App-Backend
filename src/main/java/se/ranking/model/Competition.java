@@ -20,7 +20,6 @@ public class Competition {
     private String date;
     private String endDate;
     private String eventType;
-    private String day;
 
     //change to set
     //@ManyToMany(targetEntity = User.class)
@@ -98,14 +97,6 @@ public class Competition {
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
     }
 
     public List<User> getUsers() {

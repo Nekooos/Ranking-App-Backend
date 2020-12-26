@@ -49,6 +49,7 @@ public class TestUtil {
         competition.setCountry("Sweden");
         competition.setEventType("SM");
         competition.setLocation("Angered Simhall");
+        competition.setCity("Göteborg");
         return competition;
     }
 
