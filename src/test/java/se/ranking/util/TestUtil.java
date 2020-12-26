@@ -50,6 +50,8 @@ public class TestUtil {
         competition.setEventType("SM");
         competition.setLocation("Angered Simhall");
         competition.setCity("Göteborg");
+        competition.setResults(Collections.emptyList());
+        competition.setUsers(Collections.emptyList());
         return competition;
     }
 

@@ -74,6 +74,7 @@ class CompetitionControllerTest {
                 .thenAnswer(i -> competition);
 
         mockMvc.perform(post("/competition/save")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(competition))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())

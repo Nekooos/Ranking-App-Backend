@@ -20,7 +20,7 @@ public class CompetitionController {
     @Autowired
     private CompetitionService competitionService;
 
-    @PostMapping(value = "/save", consumes = "application/json")
+    @PostMapping(value = "/save")
     public ResponseEntity<?> saveCompetition(@RequestBody Competition competition) {
         Competition savedCompetition = competitionService.save(competition);
         return ResponseEntity.ok(savedCompetition);
