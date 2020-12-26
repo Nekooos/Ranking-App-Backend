@@ -25,13 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserResultsDto> getUserResults(@Param("userId") Long id);
 }
 /*
-    private String reportedPerformance;
-    private String announcedPerformance;
-    private double points;
-    private String card;
-    private String remarks;
- */
-/*
 SELECT * FROM RESULT
 INNER JOIN COMPETITION
 ON ID = competition_id
