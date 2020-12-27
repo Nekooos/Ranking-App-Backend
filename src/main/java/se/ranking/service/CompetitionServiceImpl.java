@@ -21,8 +21,8 @@ public class CompetitionServiceImpl implements CompetitionService {
     private CompetitionRepository competitionRepository;
 
     @Override
-    public Competition findById(Long id) throws Exception {
-        return competitionRepository.findById(id).orElseThrow(()-> new Exception());
+    public Competition findById(Long id) throws NotFoundException {
+        return competitionRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -44,15 +44,18 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Competition delete(Competition competition) {
-        competitionRepository.delete(competition);
-        return competition;
+    public void delete(Long id) throws NotFoundException{
+        boolean competitionExists = competitionRepository.existsById(id);
+        if(competitionExists) {
+            competitionRepository.deleteById(id);
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public Competition patchCompetition(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
-        Competition competition = competitionRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+    public Competition patchCompetition(JsonPatch jsonPatch, Long id) throws NotFoundException, JsonPatchException, JsonProcessingException {
+        Competition competition = this.findById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode patched = jsonPatch.apply(objectMapper.convertValue(competition, JsonNode.class));

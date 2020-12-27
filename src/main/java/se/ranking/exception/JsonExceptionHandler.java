@@ -13,6 +13,7 @@ import se.ranking.model.ErrorResponse;
 import javax.validation.ConstraintViolationException;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class JsonExceptionHandler {
@@ -31,6 +32,14 @@ public class JsonExceptionHandler {
         return ResponseEntity.status(BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorResponse(constraintViolationException.getMessage()));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<Object> handleNotFound(NotFoundException notFoundException) {
+        return ResponseEntity.status(NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorResponse(notFoundException.getMessage()));
     }
 
 }

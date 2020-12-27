@@ -18,7 +18,7 @@ public class Result {
     @NotNull
     private String announcedPerformance;
     @NotNull
-    private double points;
+    private Double points;
     @NotNull
     private String card;
     @NotNull

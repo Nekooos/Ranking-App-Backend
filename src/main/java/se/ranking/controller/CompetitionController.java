@@ -56,9 +56,13 @@ public class CompetitionController {
         }
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteCompetition(@RequestBody Competition competition) {
-        competitionService.delete(competition);
-        return ResponseEntity.ok().body(competition.getName() + " was deleted");
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCompetition(@PathVariable("id") Long id) {
+        try {
+            competitionService.delete(id);
+            return ResponseEntity.ok().body("Competition was deleted");
+        } catch(NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

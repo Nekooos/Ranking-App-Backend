@@ -1,6 +1,8 @@
 package se.ranking.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,7 @@ import se.ranking.util.TestUtil;
 import java.util.Collections;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -36,6 +37,25 @@ class CompetitionControllerTest {
     public void Setup(){
         testUtil = new TestUtil();
         objectMapper = new ObjectMapper();
+    }
+
+    @Test
+    @DisplayName("PATCH /competition/save Success")
+    public void patchCompetition() throws Exception {
+        Competition competition = testUtil.createXCompetitions(1, Collections.emptyList()).get(0);
+        String json = "[{\"op\": \"replace\", \"path\": \"/name\", \"value\": \"patchedName\"}]";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(json);
+        JsonPatch jsonPatch = JsonPatch.fromJson(jsonNode);
+
+        Mockito.when(competitionService.patchCompetition(jsonPatch, 1L))
+                .thenReturn(competition);
+
+        mockMvc.perform(patch("/competition/patch/{id}", 1L)
+                .content(json)
+                .contentType("application/json-patch+json"))
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -68,17 +88,37 @@ class CompetitionControllerTest {
 
     @Test
     @DisplayName("POST /competition/save Success")
-    public void save() throws Exception {
+    public void saveCompetition() throws Exception {
         Competition competition = testUtil.createXCompetitions(1, Collections.emptyList()).get(0);
         Mockito.when(competitionService.save(competition))
-                .thenAnswer(i -> competition);
+                .thenReturn(competition);
 
         mockMvc.perform(post("/competition/save")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(competition))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(1));
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    @DisplayName("PUT /competition/save Success")
+    public void editCompetition() throws Exception {
+        Competition competition = testUtil.createXCompetitions(1, Collections.emptyList()).get(0);
+        Mockito.when(competitionService.edit(1L, competition))
+                .thenReturn(competition);
+
+        mockMvc.perform(put("/competition/put/{id}", 1L)
+                .content(objectMapper.writeValueAsString(competition))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    @DisplayName("DELETE /competition/save Success")
+    public void deleteCompetition() throws Exception {
+        Mockito.doNothing().when(competitionService).delete(1L);
+
+        mockMvc.perform(delete("/competition/delete/{id}", 1L))
+                .andExpect(status().is2xxSuccessful());
     }
 }

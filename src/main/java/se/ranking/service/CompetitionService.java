@@ -12,6 +12,6 @@ public interface CompetitionService {
     Competition save(Competition competition);
     List<Competition> findAll();
     Competition edit(Long id, Competition competition) throws Exception;
-    Competition delete(Competition competition);
+    void delete(Long id);
     Competition patchCompetition(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
 }
