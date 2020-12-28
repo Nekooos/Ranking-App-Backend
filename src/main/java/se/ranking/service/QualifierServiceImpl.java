@@ -10,14 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
+import se.ranking.model.User;
 import se.ranking.repository.QualifierRepository;
+import se.ranking.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QualifierServiceImpl implements QualifierService {
     @Autowired
     QualifierRepository qualifierRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     UtilService utilService;
@@ -63,5 +70,53 @@ public class QualifierServiceImpl implements QualifierService {
         Qualifier patchedQualifier = objectMapper.treeToValue(patched, Qualifier.class);
 
         return qualifierRepository.save(patchedQualifier);
+    }
+
+    @Override
+    public List<List<User>> getQualifiedAndNotQualified(String value, String discipline) {
+        List<User> users = userRepository.findAll();
+        List<User> qualified = getQualified(value, discipline, users);
+        List<User> notQualified = getNotQualified(value, discipline, users);
+
+
+        return null;
+    }
+
+    private List<User> getQualified(String value, String discipline, List<User> users) {
+        List<User> qualified = new ArrayList<>();
+        switch (discipline) {
+            case "STA":
+                double seconds = utilService.convertStringToSeconds(value);
+                qualified = filterQualifiedSta(users, seconds);
+                break;
+            case "FEN":
+                double meters = Double.parseDouble(value);
+                qualified = filterQualifiedFen(users, meters);
+                break;
+        }
+        return qualified;
+    }
+
+    private List<User> getNotQualified(String value, String discipline, List<User> users) {
+        List<User> notQualified = new ArrayList<>();
+        switch (discipline) {
+            case "STA":
+                double seconds = utilService.convertStringToSeconds(value);
+                notQualified = filterQualifiedSta(users, seconds);
+                break;
+            case "FEN":
+                double meters = Double.parseDouble(value);
+                notQualified = filterQualifiedFen(users, meters);
+                break;
+        }
+        return notQualified;
+    }
+
+    private List<User> filterQualifiedSta(List<User> users, final double value) {
+        return null;
+    }
+
+    private List<User> filterQualifiedFen(List<User> users, final double value) {
+        return null;
     }
 }

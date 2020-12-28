@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
+import se.ranking.model.User;
 import se.ranking.service.QualifierService;
 
 import java.util.List;
@@ -19,6 +20,12 @@ import java.util.List;
 public class QualifierController {
     @Autowired
     QualifierService qualifierService;
+
+    @GetMapping("/qualified/{value}")
+    public ResponseEntity<?> getQualifiedAndNotQualified(@PathVariable("value") String value, @PathVariable("discipline") String discipline) {
+        List<List<User>> users = qualifierService.getQualifiedAndNotQualified(value, discipline);
+        return ResponseEntity.ok(users);
+    }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveQualifier(@RequestBody Qualifier qualifier) {

@@ -4,4 +4,5 @@ public interface UtilService {
     double convertStaticApneaTimeToPoints(String time);
     double convertConstantWeightMetersToPoints(String meters);
     double convertDynamicApneaMetersToPoints(String meters);
+    double convertStringToSeconds(String time);
 }

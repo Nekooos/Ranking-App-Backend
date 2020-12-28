@@ -5,6 +5,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import se.ranking.model.Qualifier;
+import se.ranking.model.User;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface QualifierService {
     Qualifier edit(Long id, Qualifier qualifier);
     Qualifier delete(Qualifier qualifier);
     Qualifier patchQualifier(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
-
+    List<List<User>> getQualifiedAndNotQualified(String value, String discipline);
 }

@@ -18,7 +18,7 @@ public class UtilServiceImpl implements UtilService{
         return roundToHalf(Double.parseDouble(meters) * 0.5);
     }
 
-    private double convertStringToSeconds(String time) {
+    public double convertStringToSeconds(String time) {
         String[] timeUnits = time.split("[:.]");
         String[] timeUnitsMilliSeconds = time.split("\\.");
 
