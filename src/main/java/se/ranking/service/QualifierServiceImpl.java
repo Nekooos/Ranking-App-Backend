@@ -10,13 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
+import se.ranking.model.Result;
 import se.ranking.model.User;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class QualifierServiceImpl implements QualifierService {
@@ -77,9 +80,10 @@ public class QualifierServiceImpl implements QualifierService {
         List<User> users = userRepository.findAll();
         List<User> qualified = getQualified(value, discipline, users);
         List<User> notQualified = getNotQualified(value, discipline, users);
-
-
-        return null;
+        List<List<User>> userLists = new ArrayList<>();
+        userLists.add(qualified);
+        userLists.add(notQualified);
+        return userLists;
     }
 
     private List<User> getQualified(String value, String discipline, List<User> users) {
@@ -113,7 +117,16 @@ public class QualifierServiceImpl implements QualifierService {
     }
 
     private List<User> filterQualifiedSta(List<User> users, final double value) {
-        return null;
+        List<Result> results = users.stream()
+                .flatMap(user -> user.getResults()
+                    .stream()
+                        .filter(result -> utilService.convertStringToSeconds(result.getReportedPerformance()) > value))
+                .collect(Collectors.toList());
+
+        return users.stream()
+                .filter(user -> results.stream()
+                                .anyMatch(result -> result.getId().equals(user.getId())))
+                .collect(Collectors.toList());
     }
 
     private List<User> filterQualifiedFen(List<User> users, final double value) {
