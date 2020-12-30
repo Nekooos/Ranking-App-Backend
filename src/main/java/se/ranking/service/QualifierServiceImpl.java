@@ -16,8 +16,12 @@ import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -75,61 +79,42 @@ public class QualifierServiceImpl implements QualifierService {
         return qualifierRepository.save(patchedQualifier);
     }
 
+    // break down to smaller functions
     @Override
     public List<List<User>> getQualifiedAndNotQualified(String value, String discipline) {
         List<User> users = userRepository.findAll();
-        List<User> qualified = getQualified(value, discipline, users);
-        List<User> notQualified = getNotQualified(value, discipline, users);
-        List<List<User>> userLists = new ArrayList<>();
-        userLists.add(qualified);
-        userLists.add(notQualified);
-        return userLists;
-    }
-
-    private List<User> getQualified(String value, String discipline, List<User> users) {
         List<User> qualified = new ArrayList<>();
-        switch (discipline) {
-            case "STA":
-                double seconds = utilService.convertStringToSeconds(value);
-                qualified = filterQualifiedSta(users, seconds);
-                break;
-            case "FEN":
-                double meters = Double.parseDouble(value);
-                qualified = filterQualifiedFen(users, meters);
-                break;
-        }
-        return qualified;
-    }
-
-    private List<User> getNotQualified(String value, String discipline, List<User> users) {
         List<User> notQualified = new ArrayList<>();
+
+        Function<Result, Double> convertTimeToDouble = result ->  utilService.convertStringToSeconds(result.getReportedPerformance());
+        Function<Result, Double> convertMetersToDouble = result -> Double.parseDouble(result.getReportedPerformance());
+
         switch (discipline) {
             case "STA":
-                double seconds = utilService.convertStringToSeconds(value);
-                notQualified = filterQualifiedSta(users, seconds);
+                double secondsToQualify = utilService.convertStringToSeconds(value);
+                qualified = filterQualified(users, secondsToQualify, convertTimeToDouble, true);
+                notQualified = filterQualified(users, secondsToQualify, convertTimeToDouble, false);
                 break;
             case "FEN":
-                double meters = Double.parseDouble(value);
-                notQualified = filterQualifiedFen(users, meters);
+                double metersToQualify = Double.parseDouble(value);
+                qualified = filterQualified(users, metersToQualify, convertMetersToDouble, true);
+                notQualified = filterQualified(users, metersToQualify, convertMetersToDouble, false);
                 break;
+            //more cases
         }
-        return notQualified;
+        return Arrays.asList(qualified, notQualified);
     }
 
-    private List<User> filterQualifiedSta(List<User> users, final double value) {
+    private List<User> filterQualified(List<User> users, final Double value, Function<Result, Double> convertToDouble, boolean getQualified) {
         List<Result> results = users.stream()
                 .flatMap(user -> user.getResults()
-                    .stream()
-                        .filter(result -> utilService.convertStringToSeconds(result.getReportedPerformance()) > value))
+                        .stream()
+                        .filter(result -> getQualified ? convertToDouble.apply(result) >= value : convertToDouble.apply(result) <= value))
                 .collect(Collectors.toList());
 
         return users.stream()
                 .filter(user -> results.stream()
-                                .anyMatch(result -> result.getId().equals(user.getId())))
+                        .anyMatch(result -> result.getId().equals(user.getId())))
                 .collect(Collectors.toList());
-    }
-
-    private List<User> filterQualifiedFen(List<User> users, final double value) {
-        return null;
     }
 }

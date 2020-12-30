@@ -12,17 +12,25 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import se.ranking.model.Qualifier;
+import se.ranking.model.Result;
+import se.ranking.model.User;
 import se.ranking.repository.QualifierRepository;
+import se.ranking.repository.UserRepository;
 import se.ranking.util.TestUtil;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 public class QualifierServiceTests {
     @InjectMocks
     private QualifierServiceImpl qualifierService;
     @Mock
     private QualifierRepository qualifierRepository;
+    @Mock
+    private UserRepository userRepository;
     private TestUtil testUtil;
 
     @BeforeEach
@@ -38,8 +46,8 @@ public class QualifierServiceTests {
 
         Assertions.assertEquals("qualifier", qualifier.getName());
 
-        Mockito.when(qualifierRepository.findById(1L)).thenAnswer(arguments -> Optional.of(qualifier));
-        Mockito.when(qualifierRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+        when(qualifierRepository.findById(1L)).thenAnswer(arguments -> Optional.of(qualifier));
+        when(qualifierRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
 
         String json = "[{\"op\": \"replace\", \"path\": \"/name\", \"value\": \"patchedName\"}]";
 
@@ -50,5 +58,11 @@ public class QualifierServiceTests {
         Qualifier result = qualifierService.patchQualifier(jsonPatch, 1L);
 
         Assertions.assertEquals("patchedName", result.getName());
+    }
+
+    @Test
+    public void getQualifiedAndNotQualified() {
+        when(userRepository.findAll())
+                .thenAnswer(i -> i.getMock())
     }
 }
