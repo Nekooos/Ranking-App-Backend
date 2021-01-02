@@ -86,7 +86,7 @@ public class TestUtil {
         return result;
     }
 
-    private int randomTimeAndPoints() {
+    private double randomTimeAndPoints() {
         Random random = new Random();
         return random.nextInt(100)+1;
     }
@@ -106,8 +106,7 @@ public class TestUtil {
         Qualifier qualifier = new Qualifier();
         qualifier.setId(1L);
         qualifier.setName("qualifier");
-        qualifier.setUsers(Collections.emptyList());
-        qualifier.setValueToQualify(5.5);
+        qualifier.setValueToQualify("5.5");
         return qualifier;
     }
 }

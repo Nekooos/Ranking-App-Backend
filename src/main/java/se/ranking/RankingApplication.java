@@ -115,9 +115,8 @@ public class RankingApplication {
 	public static void createQualifier(UserRepository userRepository, QualifierRepository qualifierRepository) {
 		Qualifier qualifier = new Qualifier();
 		qualifier.setName("qualifier1");
-		qualifier.setValueToQualify(5.05);
+		qualifier.setValueToQualify("5.05");
 		qualifier.setId(1L);
-		qualifier.setUsers(Collections.emptyList());
 		qualifierRepository.save(qualifier);
 	}
 

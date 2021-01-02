@@ -23,6 +23,8 @@ public class Result {
     private String card;
     @NotNull
     private String remarks;
+    @NotNull
+    private String date;
 
     @Column(insertable = false, updatable = false)
     private Long userId;
@@ -72,11 +74,11 @@ public class Result {
         this.announcedPerformance = announcedPerformance;
     }
 
-    public double getPoints() {
+    public Double getPoints() {
         return points;
     }
 
-    public void setPoints(double points) {
+    public void setPoints(Double points) {
         this.points = points;
     }
 
@@ -96,12 +98,28 @@ public class Result {
         this.remarks = remarks;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getCompetitionId() {
+        return competitionId;
+    }
+
+    public void setCompetitionId(Long competitionId) {
+        this.competitionId = competitionId;
     }
 
     public User getUser() {
@@ -118,13 +136,5 @@ public class Result {
 
     public void setCompetition(Competition competition) {
         this.competition = competition;
-    }
-
-    public Long getCompetitionId() {
-        return competitionId;
-    }
-
-    public void setCompetitionId(Long competitionId) {
-        this.competitionId = competitionId;
     }
 }

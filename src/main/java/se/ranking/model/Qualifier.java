@@ -1,7 +1,9 @@
 package se.ranking.model;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Qualifier {
@@ -9,9 +11,7 @@ public class Qualifier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private double valueToQualify;
-    @ManyToMany(targetEntity = User.class)
-    private List<User> users;
+    private String valueToQualify;
 
     public Long getId() {
         return id;
@@ -29,19 +29,11 @@ public class Qualifier {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    public double getValueToQualify() {
+    public String getValueToQualify() {
         return valueToQualify;
     }
 
-    public void setValueToQualify(double valueToQualify) {
+    public void setValueToQualify(String valueToQualify) {
         this.valueToQualify = valueToQualify;
     }
 }
