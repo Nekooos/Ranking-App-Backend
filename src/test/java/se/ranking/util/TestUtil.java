@@ -86,6 +86,17 @@ public class TestUtil {
         return result;
     }
 
+    public Result createCustomResult(long id, String discipline, String card, String ap, String rp, double points) {
+        Result result = new Result();
+        result.setId(id);
+        result.setDiscipline(discipline);
+        result.setAnnouncedPerformance(ap);
+        result.setCard(card);
+        result.setPoints(points);
+        result.setReportedPerformance(rp);
+        return result;
+    }
+
     private double randomTimeAndPoints() {
         Random random = new Random();
         return random.nextInt(100)+1;

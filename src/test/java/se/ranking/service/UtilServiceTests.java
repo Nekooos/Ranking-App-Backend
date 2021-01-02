@@ -33,4 +33,13 @@ public class UtilServiceTests {
         double points = utilService.convertDynamicApneaMetersToPoints(value);
         Assertions.assertEquals(27.5, points);
     }
+
+    @Test
+    public void convertStringToSeconds() {
+        double seconds = utilService.convertStringToSeconds("0:60.0");
+        Assertions.assertEquals(60, seconds);
+
+        double seconds2 = utilService.convertStringToSeconds("5:33.4");
+        Assertions.assertEquals(333.4, seconds2);
+    }
 }

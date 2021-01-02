@@ -23,7 +23,7 @@ public class Result {
     private String card;
     @NotNull
     private String remarks;
-    @NotNull
+
     private String date;
 
     @Column(insertable = false, updatable = false)

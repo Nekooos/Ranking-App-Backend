@@ -8,6 +8,7 @@ import se.ranking.model.Qualifier;
 import se.ranking.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface QualifierService {
     Qualifier findById(Long id) throws ChangeSetPersister.NotFoundException;
@@ -16,5 +17,5 @@ public interface QualifierService {
     Qualifier edit(Long id, Qualifier qualifier);
     Qualifier delete(Qualifier qualifier);
     Qualifier patchQualifier(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
-    List<List<User>> getQualifiedAndNotQualified(String value, String discipline);
+    List<Set<User>> getQualifiedAndNotQualified(String value, String discipline);
 }

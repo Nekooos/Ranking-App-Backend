@@ -15,10 +15,7 @@ import se.ranking.model.User;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -79,12 +76,11 @@ public class QualifierServiceImpl implements QualifierService {
         return qualifierRepository.save(patchedQualifier);
     }
 
-    // break down to smaller functions
     @Override
-    public List<List<User>> getQualifiedAndNotQualified(String value, String discipline) {
+    public List<Set<User>> getQualifiedAndNotQualified(String value, String discipline) {
         List<User> users = userRepository.findAll();
-        List<User> qualified = new ArrayList<>();
-        List<User> notQualified = new ArrayList<>();
+        Set<User> qualified = new HashSet<>();
+        Set<User> notQualified = new HashSet<>();
 
         Function<Result, Double> convertTimeToDouble = result ->  utilService.convertStringToSeconds(result.getReportedPerformance());
         Function<Result, Double> convertMetersToDouble = result -> Double.parseDouble(result.getReportedPerformance());
@@ -92,29 +88,35 @@ public class QualifierServiceImpl implements QualifierService {
         switch (discipline) {
             case "STA":
                 double secondsToQualify = utilService.convertStringToSeconds(value);
-                qualified = filterQualified(users, secondsToQualify, convertTimeToDouble, true);
-                notQualified = filterQualified(users, secondsToQualify, convertTimeToDouble, false);
+                qualified = getQualified(users, secondsToQualify, convertTimeToDouble, discipline);
+                notQualified = getNotQualified(qualified, users);
                 break;
             case "FEN":
                 double metersToQualify = Double.parseDouble(value);
-                qualified = filterQualified(users, metersToQualify, convertMetersToDouble, true);
-                notQualified = filterQualified(users, metersToQualify, convertMetersToDouble, false);
+                qualified = getQualified(users, metersToQualify, convertMetersToDouble, discipline);
+                notQualified = getNotQualified(qualified, users);
                 break;
             //more cases
         }
         return Arrays.asList(qualified, notQualified);
     }
 
-    private List<User> filterQualified(List<User> users, final Double value, Function<Result, Double> convertToDouble, boolean getQualified) {
+    private Set<User> getQualified(List<User> users, final double value, Function<Result, Double> convertToDouble, String discipline) {
         List<Result> results = users.stream()
                 .flatMap(user -> user.getResults()
                         .stream()
-                        .filter(result -> getQualified ? convertToDouble.apply(result) >= value : convertToDouble.apply(result) <= value))
+                        .filter(result -> convertToDouble.apply(result) >= value && discipline.equals(result.getDiscipline()) && !result.getCard().equals("red")))
                 .collect(Collectors.toList());
 
         return users.stream()
                 .filter(user -> results.stream()
-                        .anyMatch(result -> result.getId().equals(user.getId())))
-                .collect(Collectors.toList());
+                        .anyMatch(result -> result.getUserId().equals(user.getId())))
+                .collect(Collectors.toSet());
+    }
+
+    private Set<User> getNotQualified(Set<User> qualifiedUsers, List<User> allUsers) {
+        return allUsers.stream()
+                .filter(user -> !qualifiedUsers.contains(user))
+                .collect(Collectors.toSet());
     }
 }

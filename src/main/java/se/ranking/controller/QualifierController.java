@@ -13,6 +13,7 @@ import se.ranking.model.User;
 import se.ranking.service.QualifierService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -23,7 +24,7 @@ public class QualifierController {
 
     @GetMapping("/qualified/{value}")
     public ResponseEntity<?> getQualifiedAndNotQualified(@PathVariable("value") String value, @PathVariable("discipline") String discipline) {
-        List<List<User>> users = qualifierService.getQualifiedAndNotQualified(value, discipline);
+        List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(value, discipline);
         return ResponseEntity.ok(users);
     }
 

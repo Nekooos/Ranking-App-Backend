@@ -19,10 +19,14 @@ import se.ranking.repository.UserRepository;
 import se.ranking.util.TestUtil;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class QualifierServiceTests {
     @InjectMocks
@@ -31,6 +35,9 @@ public class QualifierServiceTests {
     private QualifierRepository qualifierRepository;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private UtilServiceImpl utilService;
+
     private TestUtil testUtil;
 
     @BeforeEach
@@ -57,12 +64,47 @@ public class QualifierServiceTests {
 
         Qualifier result = qualifierService.patchQualifier(jsonPatch, 1L);
 
-        Assertions.assertEquals("patchedName", result.getName());
+        assertEquals("patchedName", result.getName());
     }
 
     @Test
     public void getQualifiedAndNotQualified() {
         when(userRepository.findAll())
-                .thenAnswer(i -> i.getMock())
+                .thenAnswer(i -> createTestUsers());
+
+        when(utilService.convertStringToSeconds(anyString()))
+                .thenCallRealMethod();
+
+        List<Set<User>> users = qualifierService.getQualifiedAndNotQualified("4:00.0", "STA");
+
+        assertEquals(2, users.get(0).size());
+        assertEquals(2, users.get(1).size());
+    }
+
+    private List<User> createTestUsers() {
+        Result result1 = testUtil.createCustomResult(1L, "STA", "white", "3:45.4", "4:21.7", 55.4);
+        Result result2 = testUtil.createCustomResult(2L, "STA", "red", "3:45.4", "4:55.7", 64.4);
+        Result result3 = testUtil.createCustomResult(3L, "FEN", "white", "3:45.4", "4:21.7", 55.4);
+        Result result4 = testUtil.createCustomResult(4L, "STA", "red", "3:45.4", "2:55.7", 28.4);
+        Result result5 = testUtil.createCustomResult(5L, "STA", "yellow", "3:45.4", "2:55.7", 78.4);
+        Result result6 = testUtil.createCustomResult(6L, "STA", "yellow", "5:45.4", "3:55.7", 18.4);
+        Result result7 = testUtil.createCustomResult(7L, "FEN", "red", ":45.4", "6:55.7", 78.4);
+        Result result8 = testUtil.createCustomResult(8L, "STA", "white", "5:45.4", "5:55.7", 18.4);
+
+        User user1 = testUtil.createUser(1, Arrays.asList(result1, result2));
+        User user2 = testUtil.createUser(2, Arrays.asList(result3, result4));
+        User user3 = testUtil.createUser(3, Arrays.asList(result5, result6));
+        User user4 = testUtil.createUser(4, Arrays.asList(result8, result7));
+
+        result1.setUserId(1L);
+        result2.setUserId(1L);
+        result3.setUserId(2L);
+        result4.setUserId(2L);
+        result5.setUserId(3L);
+        result6.setUserId(3L);
+        result7.setUserId(4L);
+        result8.setUserId(4L);
+
+        return Arrays.asList(user1, user2, user3, user4);
     }
 }
