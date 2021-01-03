@@ -1,9 +1,11 @@
 package se.ranking.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 public class Result {
@@ -21,10 +23,10 @@ public class Result {
     private Double points;
     @NotNull
     private String card;
-    @NotNull
+
     private String remarks;
 
-    private String date;
+    private LocalDateTime date;
 
     @Column(insertable = false, updatable = false)
     private Long userId;
@@ -98,11 +100,11 @@ public class Result {
         this.remarks = remarks;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

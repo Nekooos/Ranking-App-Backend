@@ -1,14 +1,13 @@
 package se.ranking.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -37,6 +36,9 @@ public class User {
     @JsonManagedReference
     @OneToMany(fetch= FetchType.LAZY, mappedBy = "user")
     List<Result> results;
+
+    @OneToMany(mappedBy = "user")
+    Set<QualifierAnswer> qualifierUsers;
 
     public Long getId() {
         return id;
@@ -101,4 +103,12 @@ public class User {
     public void setCompetitions(List<Competition> competitions) {
         this.competitions = competitions;
     }*/
+
+    public Set<QualifierAnswer> getQualifierUsers() {
+        return qualifierUsers;
+    }
+
+    public void setQualifierUsers(Set<QualifierAnswer> qualifierUsers) {
+        this.qualifierUsers = qualifierUsers;
+    }
 }

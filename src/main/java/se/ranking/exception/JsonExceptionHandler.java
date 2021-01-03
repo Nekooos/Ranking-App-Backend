@@ -41,5 +41,4 @@ public class JsonExceptionHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorResponse(notFoundException.getMessage()));
     }
-
 }

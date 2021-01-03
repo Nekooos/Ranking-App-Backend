@@ -1,17 +1,26 @@
 package se.ranking.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 public class Qualifier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String name;
+    @NotNull
     private String valueToQualify;
+    @NotNull
+    private LocalDateTime startDate;
+    @NotNull
+    private LocalDateTime endDate;
+
+    @OneToMany(mappedBy = "user")
+    Set<QualifierAnswer> qualifierUsers;
 
     public Long getId() {
         return id;
@@ -35,5 +44,13 @@ public class Qualifier {
 
     public void setValueToQualify(String valueToQualify) {
         this.valueToQualify = valueToQualify;
+    }
+
+    public Set<QualifierAnswer> getQualifierUsers() {
+        return qualifierUsers;
+    }
+
+    public void setQualifierUsers(Set<QualifierAnswer> qualifierUsers) {
+        this.qualifierUsers = qualifierUsers;
     }
 }

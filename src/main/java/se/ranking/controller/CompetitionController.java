@@ -22,8 +22,13 @@ public class CompetitionController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<?> saveCompetition(@RequestBody Competition competition) {
-        Competition savedCompetition = competitionService.save(competition);
-        return ResponseEntity.ok(savedCompetition);
+        try {
+            Competition savedCompetition = competitionService.save(competition);
+            return ResponseEntity.ok(savedCompetition);
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
     @GetMapping("/{id}")
