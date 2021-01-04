@@ -28,6 +28,7 @@ public class User {
     private String lastName;
     @NotNull
     private String gender;
+    private String club;
 
     //change to set
     //@ManyToMany(mappedBy = "users")
@@ -110,5 +111,13 @@ public class User {
 
     public void setQualifierUsers(Set<QualifierAnswer> qualifierUsers) {
         this.qualifierUsers = qualifierUsers;
+    }
+
+    public String getClub() {
+        return club;
+    }
+
+    public void setClub(String club) {
+        this.club = club;
     }
 }

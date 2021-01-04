@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.ranking.exception.NotFoundException;
 import se.ranking.model.Qualifier;
+import se.ranking.model.QualifierAnswer;
 import se.ranking.model.User;
 import se.ranking.service.QualifierService;
 
@@ -21,6 +23,16 @@ import java.util.Set;
 public class QualifierController {
     @Autowired
     QualifierService qualifierService;
+
+    @PostMapping("/answer")
+    public ResponseEntity<?> saveQualifierAnswer(@RequestBody User user, @RequestBody Qualifier qualifier, @RequestBody boolean answer) {
+        try {
+            QualifierAnswer qualifierAnswer = qualifierService.saveQualifierAnswer(user, qualifier, answer);
+            return ResponseEntity.ok(qualifierAnswer);
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @GetMapping("/qualified/{value}")
     public ResponseEntity<?> getQualifiedAndNotQualified(@PathVariable("value") String value, @PathVariable("discipline") String discipline) {
