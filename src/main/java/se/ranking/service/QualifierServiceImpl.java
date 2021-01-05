@@ -15,6 +15,7 @@ import se.ranking.repository.QualifierAnswerRepository;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.UserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -146,15 +147,10 @@ public class QualifierServiceImpl implements QualifierService {
     }
 
     private boolean resultDateIsWithinQualifierDate(Result result, Qualifier qualifier) {
-        LocalDateTime resultDate = stringToLocalDateTime(result.getDate());
-        LocalDateTime qualifierStart = stringToLocalDateTime(qualifier.getStartDate());
-        LocalDateTime qualifierEnd = stringToLocalDateTime(qualifier.getEndDate());
+        LocalDate resultDate = utilService.stringToLocalDateTime(result.getDate());
+        LocalDate qualifierStart = utilService.stringToLocalDateTime(qualifier.getStartDate());
+        LocalDate qualifierEnd = utilService.stringToLocalDateTime(qualifier.getEndDate());
 
         return !resultDate.isBefore(qualifierStart) && !resultDate.isAfter(qualifierEnd);
-    }
-
-    private LocalDateTime stringToLocalDateTime(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDateTime.parse(date, formatter);
     }
 }

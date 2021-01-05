@@ -75,26 +75,33 @@ public class QualifierServiceTests {
         when(utilService.convertStringToSeconds(anyString()))
                 .thenCallRealMethod();
 
+        when(utilService.stringToLocalDateTime(anyString()))
+                .thenCallRealMethod();
+
         List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(qualifier);
 
         assertEquals(2, users.get(0).size());
-        assertEquals(2, users.get(1).size());
+        assertEquals(4, users.get(1).size());
     }
 
     private List<User> createTestUsers() {
-        Result result1 = testUtil.createCustomResult(1L, Discipline.STA, Card.WHITE, "3:45.4", "4:21.7", 55.4);
-        Result result2 = testUtil.createCustomResult(2L, Discipline.STA, Card.RED, "3:45.4", "4:55.7", 64.4);
-        Result result3 = testUtil.createCustomResult(3L, Discipline.FEN, Card.WHITE, "3:45.4", "4:21.7", 55.4);
-        Result result4 = testUtil.createCustomResult(4L, Discipline.STA, Card.RED, "3:45.4", "2:55.7", 28.4);
-        Result result5 = testUtil.createCustomResult(5L, Discipline.STA, Card.YELLOW, "3:45.4", "2:55.7", 78.4);
-        Result result6 = testUtil.createCustomResult(6L, Discipline.STA, Card.YELLOW, "5:45.4", "3:55.7", 18.4);
-        Result result7 = testUtil.createCustomResult(7L, Discipline.FEN, Card.RED, ":45.4", "6:55.7", 78.4);
-        Result result8 = testUtil.createCustomResult(8L, Discipline.STA, Card.WHITE, "5:45.4", "5:55.7", 18.4);
+        Result result1 = testUtil.createCustomResult(1L, Discipline.STA, Card.WHITE, "3:45.4", "4:21.7", 55.4, "2020-04-03");
+        Result result2 = testUtil.createCustomResult(2L, Discipline.STA, Card.RED, "3:45.4", "4:55.7", 64.4, "2020-04-03");
+        Result result3 = testUtil.createCustomResult(3L, Discipline.FEN, Card.WHITE, "3:45.4", "4:21.7", 55.4, "2020-08-01");
+        Result result4 = testUtil.createCustomResult(4L, Discipline.STA, Card.RED, "3:45.4", "2:55.7", 28.4, "2020-12-31");
+        Result result5 = testUtil.createCustomResult(5L, Discipline.STA, Card.YELLOW, "3:45.4", "2:55.7", 78.4, "2020-05-01");
+        Result result6 = testUtil.createCustomResult(6L, Discipline.STA, Card.YELLOW, "5:45.4", "3:55.7", 18.4, "2020-01-29");
+        Result result7 = testUtil.createCustomResult(7L, Discipline.FEN, Card.RED, "5:45.4", "6:55.7", 78.4, "2020-01-25");
+        Result result8 = testUtil.createCustomResult(8L, Discipline.STA, Card.WHITE, "5:45.4", "5:55.7", 18.4, "2020-07-21");
+        Result result9 = testUtil.createCustomResult(9L, Discipline.STA, Card.WHITE, "5:45.4", "6:55.7", 78.4, "2019-01-25");
+        Result result10 = testUtil.createCustomResult(10L, Discipline.STA, Card.WHITE, "5:45.4", "6:55.7", 78.4, "2022-01-25");
 
         User user1 = testUtil.createUser(1, Arrays.asList(result1, result2));
         User user2 = testUtil.createUser(2, Arrays.asList(result3, result4));
         User user3 = testUtil.createUser(3, Arrays.asList(result5, result6));
         User user4 = testUtil.createUser(4, Arrays.asList(result8, result7));
+        User user5 = testUtil.createUser(5, Arrays.asList(result9));
+        User user6 = testUtil.createUser(6, Arrays.asList(result9));
 
         result1.setUserId(1L);
         result2.setUserId(1L);
@@ -104,7 +111,9 @@ public class QualifierServiceTests {
         result6.setUserId(3L);
         result7.setUserId(4L);
         result8.setUserId(4L);
+        result9.setUserId(5L);
+        result10.setUserId(6L);
 
-        return Arrays.asList(user1, user2, user3, user4);
+        return Arrays.asList(user1, user2, user3, user4, user5, user6);
     }
 }

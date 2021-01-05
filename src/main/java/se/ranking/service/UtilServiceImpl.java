@@ -2,8 +2,16 @@ package se.ranking.service;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class UtilServiceImpl implements UtilService{
+    public LocalDate stringToLocalDateTime(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(date, formatter);
+    }
 
     public double convertStaticApneaTimeToPoints(String time) {
         double seconds = convertStringToSeconds(time);

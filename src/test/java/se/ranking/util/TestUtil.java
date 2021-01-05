@@ -83,7 +83,7 @@ public class TestUtil {
         return result;
     }
 
-    public Result createCustomResult(long id, Discipline discipline, Card card, String ap, String rp, double points) {
+    public Result createCustomResult(long id, Discipline discipline, Card card, String ap, String rp, double points, String date) {
         Result result = new Result();
         result.setId(id);
         result.setDiscipline(discipline);
@@ -91,6 +91,7 @@ public class TestUtil {
         result.setCard(card);
         result.setPoints(points);
         result.setReportedPerformance(rp);
+        result.setDate(date);
         return result;
     }
 
@@ -116,6 +117,8 @@ public class TestUtil {
         qualifier.setName("qualifier");
         qualifier.setValueToQualify("4:00.0");
         qualifier.setDiscipline(Discipline.STA);
+        qualifier.setStartDate("2020-03-01");
+        qualifier.setEndDate("2021-01-03");
         return qualifier;
     }
 }
