@@ -1,9 +1,6 @@
 package se.ranking.util;
 
-import se.ranking.model.Competition;
-import se.ranking.model.Qualifier;
-import se.ranking.model.Result;
-import se.ranking.model.User;
+import se.ranking.model.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,7 +74,7 @@ public class TestUtil {
     public Result createResult(int x, User user) {
         Result result = new Result();
         result.setId((long) x);
-        result.setDiscipline("STA");
+        result.setDiscipline(Discipline.STA);
         result.setAnnouncedPerformance(String.valueOf(randomTimeAndPoints()));
         result.setCard(card(x));
         result.setPoints(randomTimeAndPoints());
@@ -86,7 +83,7 @@ public class TestUtil {
         return result;
     }
 
-    public Result createCustomResult(long id, String discipline, String card, String ap, String rp, double points) {
+    public Result createCustomResult(long id, Discipline discipline, Card card, String ap, String rp, double points) {
         Result result = new Result();
         result.setId(id);
         result.setDiscipline(discipline);
@@ -102,14 +99,14 @@ public class TestUtil {
         return random.nextInt(100)+1;
     }
 
-    private String card(int i) {
+    private Card card(int i) {
         if(i % 3==0)
-            return "red";
+            return Card.RED;
         else if(i % 3 == 1) {
-            return "yellow";
+            return Card.YELLOW;
         }
         else {
-            return "white";
+            return Card.WHITE;
         }
     }
 
@@ -117,7 +114,8 @@ public class TestUtil {
         Qualifier qualifier = new Qualifier();
         qualifier.setId(1L);
         qualifier.setName("qualifier");
-        qualifier.setValueToQualify("5.5");
+        qualifier.setValueToQualify("4:00.0");
+        qualifier.setDiscipline(Discipline.STA);
         return qualifier;
     }
 }

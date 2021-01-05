@@ -15,9 +15,11 @@ public class Qualifier {
     @NotNull
     private String valueToQualify;
     @NotNull
-    private LocalDateTime startDate;
+    private String startDate;
     @NotNull
-    private LocalDateTime endDate;
+    private String endDate;
+    @NotNull
+    private Discipline discipline;
 
     @OneToMany(mappedBy = "user")
     Set<QualifierAnswer> qualifierUsers;
@@ -52,5 +54,29 @@ public class Qualifier {
 
     public void setQualifierUsers(Set<QualifierAnswer> qualifierUsers) {
         this.qualifierUsers = qualifierUsers;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public Discipline getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
     }
 }

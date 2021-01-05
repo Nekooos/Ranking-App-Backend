@@ -14,19 +14,21 @@ public class Result {
     @Column(name ="result_id")
     private Long id;
     @NotNull
-    private String discipline;
+    private Discipline discipline;
     @NotNull
     private String reportedPerformance;
     @NotNull
     private String announcedPerformance;
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Double points;
     @NotNull
-    private String card;
+    @Enumerated(EnumType.STRING)
+    private Card card;
 
     private String remarks;
 
-    private LocalDateTime date;
+    private String date;
 
     @Column(insertable = false, updatable = false)
     private Long userId;
@@ -52,11 +54,11 @@ public class Result {
         this.id = id;
     }
 
-    public String getDiscipline() {
+    public Discipline getDiscipline() {
         return discipline;
     }
 
-    public void setDiscipline(String discipline) {
+    public void setDiscipline(Discipline discipline) {
         this.discipline = discipline;
     }
 
@@ -84,11 +86,11 @@ public class Result {
         this.points = points;
     }
 
-    public String getCard() {
+    public Card getCard() {
         return card;
     }
 
-    public void setCard(String card) {
+    public void setCard(Card card) {
         this.card = card;
     }
 
@@ -100,11 +102,11 @@ public class Result {
         this.remarks = remarks;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

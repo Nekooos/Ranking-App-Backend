@@ -5,19 +5,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.NotFoundException;
-import se.ranking.model.Qualifier;
-import se.ranking.model.QualifierAnswer;
-import se.ranking.model.Result;
-import se.ranking.model.User;
+import se.ranking.model.*;
 import se.ranking.repository.QualifierAnswerRepository;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -82,24 +81,25 @@ public class QualifierServiceImpl implements QualifierService {
         return qualifierRepository.save(patchedQualifier);
     }
 
+    /*
+        TODO change to queries and more entities for each discipline
+     */
     @Override
-    public List<Set<User>> getQualifiedAndNotQualified(String value, String discipline) {
+    public List<Set<User>> getQualifiedAndNotQualified(Qualifier qualifier) {
         List<User> users = userRepository.findAll();
         Set<User> qualified = new HashSet<>();
         Set<User> notQualified = new HashSet<>();
 
-        Function<Result, Double> convertTimeToDouble = result ->  utilService.convertStringToSeconds(result.getReportedPerformance());
-        Function<Result, Double> convertMetersToDouble = result -> Double.parseDouble(result.getReportedPerformance());
+        Function<String, Double> convertTimeToDouble = string ->  utilService.convertStringToSeconds(string);
+        Function<String, Double> convertMetersToDouble = Double::parseDouble;
 
-        switch (discipline) {
+        switch (qualifier.getDiscipline().getValue()) {
             case "STA":
-                double secondsToQualify = utilService.convertStringToSeconds(value);
-                qualified = getQualified(users, secondsToQualify, convertTimeToDouble, discipline);
+                qualified = getQualified(users, qualifier, convertTimeToDouble);
                 notQualified = getNotQualified(qualified, users);
                 break;
             case "FEN":
-                double metersToQualify = Double.parseDouble(value);
-                qualified = getQualified(users, metersToQualify, convertMetersToDouble, discipline);
+                qualified = getQualified(users, qualifier, convertMetersToDouble);
                 notQualified = getNotQualified(qualified, users);
                 break;
             //more cases
@@ -117,12 +117,8 @@ public class QualifierServiceImpl implements QualifierService {
         return qualifierAnswerRepository.save(qualifierAnswer);
     }
 
-    private Set<User> getQualified(List<User> users, final double value, Function<Result, Double> convertToDouble, String discipline) {
-        List<Result> results = users.stream()
-                .flatMap(user -> user.getResults()
-                        .stream()
-                        .filter(result -> convertToDouble.apply(result) >= value && discipline.equals(result.getDiscipline()) && !result.getCard().equals("red")))
-                .collect(Collectors.toList());
+    private Set<User> getQualified(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
+        List<Result> results = filterQualifiedResults(users, qualifier, convertToDouble);
 
         return users.stream()
                 .filter(user -> results.stream()
@@ -130,9 +126,35 @@ public class QualifierServiceImpl implements QualifierService {
                 .collect(Collectors.toSet());
     }
 
+    private List<Result> filterQualifiedResults(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
+        return users.stream()
+                .flatMap(user -> user.getResults()
+                        .stream()
+                        .filter(result -> convertToDouble.apply(result.getReportedPerformance()) >= convertToDouble.apply(qualifier.getValueToQualify())
+                                && qualifier.getDiscipline().equals(result.getDiscipline())
+                                && !result.getCard().equals(Card.RED)
+                                && resultDateIsWithinQualifierDate(result, qualifier)
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
     private Set<User> getNotQualified(Set<User> qualifiedUsers, List<User> allUsers) {
         return allUsers.stream()
                 .filter(user -> !qualifiedUsers.contains(user))
                 .collect(Collectors.toSet());
+    }
+
+    private boolean resultDateIsWithinQualifierDate(Result result, Qualifier qualifier) {
+        LocalDateTime resultDate = stringToLocalDateTime(result.getDate());
+        LocalDateTime qualifierStart = stringToLocalDateTime(qualifier.getStartDate());
+        LocalDateTime qualifierEnd = stringToLocalDateTime(qualifier.getEndDate());
+
+        return !resultDate.isBefore(qualifierStart) && !resultDate.isAfter(qualifierEnd);
+    }
+
+    private LocalDateTime stringToLocalDateTime(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDateTime.parse(date, formatter);
     }
 }

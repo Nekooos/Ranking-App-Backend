@@ -18,6 +18,6 @@ public interface QualifierService {
     Qualifier edit(Long id, Qualifier qualifier);
     Qualifier delete(Qualifier qualifier);
     Qualifier patchQualifier(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
-    List<Set<User>> getQualifiedAndNotQualified(String value, String discipline);
+    List<Set<User>> getQualifiedAndNotQualified(Qualifier qualifier);
     QualifierAnswer saveQualifierAnswer(User user, Qualifier qualifier, boolean answer);
 }

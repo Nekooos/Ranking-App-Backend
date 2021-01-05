@@ -35,8 +35,8 @@ public class QualifierController {
     }
 
     @GetMapping("/qualified/{value}")
-    public ResponseEntity<?> getQualifiedAndNotQualified(@PathVariable("value") String value, @PathVariable("discipline") String discipline) {
-        List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(value, discipline);
+    public ResponseEntity<?> getQualifiedAndNotQualified(@RequestBody Qualifier qualifier) {
+        List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(qualifier);
         return ResponseEntity.ok(users);
     }
 

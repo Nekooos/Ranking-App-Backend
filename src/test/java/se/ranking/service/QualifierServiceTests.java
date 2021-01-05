@@ -11,9 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import se.ranking.model.Qualifier;
-import se.ranking.model.Result;
-import se.ranking.model.User;
+import se.ranking.model.*;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.UserRepository;
 import se.ranking.util.TestUtil;
@@ -69,27 +67,29 @@ public class QualifierServiceTests {
 
     @Test
     public void getQualifiedAndNotQualified() {
+        Qualifier qualifier = testUtil.createQualifier();
+
         when(userRepository.findAll())
                 .thenAnswer(i -> createTestUsers());
 
         when(utilService.convertStringToSeconds(anyString()))
                 .thenCallRealMethod();
 
-        List<Set<User>> users = qualifierService.getQualifiedAndNotQualified("4:00.0", "STA");
+        List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(qualifier);
 
         assertEquals(2, users.get(0).size());
         assertEquals(2, users.get(1).size());
     }
 
     private List<User> createTestUsers() {
-        Result result1 = testUtil.createCustomResult(1L, "STA", "white", "3:45.4", "4:21.7", 55.4);
-        Result result2 = testUtil.createCustomResult(2L, "STA", "red", "3:45.4", "4:55.7", 64.4);
-        Result result3 = testUtil.createCustomResult(3L, "FEN", "white", "3:45.4", "4:21.7", 55.4);
-        Result result4 = testUtil.createCustomResult(4L, "STA", "red", "3:45.4", "2:55.7", 28.4);
-        Result result5 = testUtil.createCustomResult(5L, "STA", "yellow", "3:45.4", "2:55.7", 78.4);
-        Result result6 = testUtil.createCustomResult(6L, "STA", "yellow", "5:45.4", "3:55.7", 18.4);
-        Result result7 = testUtil.createCustomResult(7L, "FEN", "red", ":45.4", "6:55.7", 78.4);
-        Result result8 = testUtil.createCustomResult(8L, "STA", "white", "5:45.4", "5:55.7", 18.4);
+        Result result1 = testUtil.createCustomResult(1L, Discipline.STA, Card.WHITE, "3:45.4", "4:21.7", 55.4);
+        Result result2 = testUtil.createCustomResult(2L, Discipline.STA, Card.RED, "3:45.4", "4:55.7", 64.4);
+        Result result3 = testUtil.createCustomResult(3L, Discipline.FEN, Card.WHITE, "3:45.4", "4:21.7", 55.4);
+        Result result4 = testUtil.createCustomResult(4L, Discipline.STA, Card.RED, "3:45.4", "2:55.7", 28.4);
+        Result result5 = testUtil.createCustomResult(5L, Discipline.STA, Card.YELLOW, "3:45.4", "2:55.7", 78.4);
+        Result result6 = testUtil.createCustomResult(6L, Discipline.STA, Card.YELLOW, "5:45.4", "3:55.7", 18.4);
+        Result result7 = testUtil.createCustomResult(7L, Discipline.FEN, Card.RED, ":45.4", "6:55.7", 78.4);
+        Result result8 = testUtil.createCustomResult(8L, Discipline.STA, Card.WHITE, "5:45.4", "5:55.7", 18.4);
 
         User user1 = testUtil.createUser(1, Arrays.asList(result1, result2));
         User user2 = testUtil.createUser(2, Arrays.asList(result3, result4));

@@ -6,10 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import se.ranking.controller.UserController;
-import se.ranking.model.Competition;
-import se.ranking.model.Qualifier;
-import se.ranking.model.Result;
-import se.ranking.model.User;
+import se.ranking.model.*;
 import se.ranking.repository.CompetitionRepository;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.ResultRepository;
@@ -95,7 +92,7 @@ public class RankingApplication {
 
 	public static Result createResult(int x, UserRepository userRepository, CompetitionRepository competitionRepository) {
 		Result result = new Result();
-		result.setDiscipline(x % 2 == 0 ? "STA" : "FEN");
+		result.setDiscipline(x % 2 == 0 ? Discipline.STA : Discipline.FEN);
 		result.setAnnouncedPerformance(String.valueOf(randomTimeAndPoints()));
 		result.setCard(card(x));
 		result.setPoints(randomTimeAndPoints());
@@ -125,14 +122,14 @@ public class RankingApplication {
 		return random.nextInt(100)+1;
 	}
 
-	private static String card(int i) {
+	private static Card card(int i) {
 		if(i % 3==0)
-			return "red";
+			return Card.RED;
 		else if(i % 3 == 1) {
-			return "yellow";
+			return Card.YELLOW;
 		}
 		else {
-			return "white";
+			return Card.WHITE;
 		}
 	}
 
