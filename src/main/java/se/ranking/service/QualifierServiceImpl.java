@@ -39,6 +39,69 @@ public class QualifierServiceImpl implements QualifierService {
     @Autowired
     UtilService utilService;
 
+    /*
+       TODO change to queries and more entities for each discipline
+    */
+    @Override
+    public List<Set<User>> getQualifiedAndNotQualified(Qualifier qualifier) {
+        List<User> users = userRepository.findAll();
+        Set<User> qualified = new HashSet<>();
+        Set<User> notQualified = new HashSet<>();
+
+        Function<String, Double> convertTimeToDouble = string ->  utilService.convertStringToSeconds(string);
+        Function<String, Double> convertMetersToDouble = Double::parseDouble;
+
+        switch (qualifier.getDiscipline().getValue()) {
+            case "STA":
+                qualified = getQualified(users, qualifier, convertTimeToDouble);
+                notQualified = getNotQualified(qualified, users);
+                break;
+            case "FEN":
+                qualified = getQualified(users, qualifier, convertMetersToDouble);
+                notQualified = getNotQualified(qualified, users);
+                break;
+            //more cases
+        }
+        return Arrays.asList(qualified, notQualified);
+    }
+
+
+    private Set<User> getQualified(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
+        List<Result> results = filterQualifiedResults(users, qualifier, convertToDouble);
+
+        return users.stream()
+                .filter(user -> results.stream()
+                        .anyMatch(result -> result.getUserId().equals(user.getId())))
+                .collect(Collectors.toSet());
+    }
+
+    private List<Result> filterQualifiedResults(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
+        return users.stream()
+                .flatMap(user -> user.getResults()
+                        .stream()
+                        .filter(result -> convertToDouble.apply(result.getReportedPerformance()) >= convertToDouble.apply(qualifier.getValueToQualify())
+                                && qualifier.getDiscipline().equals(result.getDiscipline())
+                                && !result.getCard().equals(Card.RED)
+                                && resultDateIsWithinQualifierDate(result, qualifier)
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
+    private boolean resultDateIsWithinQualifierDate(Result result, Qualifier qualifier) {
+        LocalDate resultDate = utilService.stringToLocalDateTime(result.getDate());
+        LocalDate qualifierStart = utilService.stringToLocalDateTime(qualifier.getStartDate());
+        LocalDate qualifierEnd = utilService.stringToLocalDateTime(qualifier.getEndDate());
+
+        return !resultDate.isBefore(qualifierStart) && !resultDate.isAfter(qualifierEnd);
+    }
+
+    private Set<User> getNotQualified(Set<User> qualifiedUsers, List<User> allUsers) {
+        return allUsers.stream()
+                .filter(user -> !qualifiedUsers.contains(user))
+                .collect(Collectors.toSet());
+    }
+
     @Override
     public Qualifier findById(Long id) throws NotFoundException{
         return qualifierRepository.findById(id)
@@ -80,77 +143,5 @@ public class QualifierServiceImpl implements QualifierService {
         Qualifier patchedQualifier = objectMapper.treeToValue(patched, Qualifier.class);
 
         return qualifierRepository.save(patchedQualifier);
-    }
-
-    /*
-        TODO change to queries and more entities for each discipline
-     */
-    @Override
-    public List<Set<User>> getQualifiedAndNotQualified(Qualifier qualifier) {
-        List<User> users = userRepository.findAll();
-        Set<User> qualified = new HashSet<>();
-        Set<User> notQualified = new HashSet<>();
-
-        Function<String, Double> convertTimeToDouble = string ->  utilService.convertStringToSeconds(string);
-        Function<String, Double> convertMetersToDouble = Double::parseDouble;
-
-        switch (qualifier.getDiscipline().getValue()) {
-            case "STA":
-                qualified = getQualified(users, qualifier, convertTimeToDouble);
-                notQualified = getNotQualified(qualified, users);
-                break;
-            case "FEN":
-                qualified = getQualified(users, qualifier, convertMetersToDouble);
-                notQualified = getNotQualified(qualified, users);
-                break;
-            //more cases
-        }
-        return Arrays.asList(qualified, notQualified);
-    }
-
-    @Override
-    public QualifierAnswer saveQualifierAnswer(User user, Qualifier qualifier, boolean answer) {
-        QualifierAnswer qualifierAnswer = new QualifierAnswer();
-        qualifierAnswer.setUser(user);
-        qualifierAnswer.setQualifier(qualifier);
-        qualifierAnswer.setAnswer(answer);
-        qualifierAnswer.setDate(LocalDateTime.now());
-        return qualifierAnswerRepository.save(qualifierAnswer);
-    }
-
-    private Set<User> getQualified(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
-        List<Result> results = filterQualifiedResults(users, qualifier, convertToDouble);
-
-        return users.stream()
-                .filter(user -> results.stream()
-                        .anyMatch(result -> result.getUserId().equals(user.getId())))
-                .collect(Collectors.toSet());
-    }
-
-    private List<Result> filterQualifiedResults(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
-        return users.stream()
-                .flatMap(user -> user.getResults()
-                        .stream()
-                        .filter(result -> convertToDouble.apply(result.getReportedPerformance()) >= convertToDouble.apply(qualifier.getValueToQualify())
-                                && qualifier.getDiscipline().equals(result.getDiscipline())
-                                && !result.getCard().equals(Card.RED)
-                                && resultDateIsWithinQualifierDate(result, qualifier)
-                        )
-                )
-                .collect(Collectors.toList());
-    }
-
-    private Set<User> getNotQualified(Set<User> qualifiedUsers, List<User> allUsers) {
-        return allUsers.stream()
-                .filter(user -> !qualifiedUsers.contains(user))
-                .collect(Collectors.toSet());
-    }
-
-    private boolean resultDateIsWithinQualifierDate(Result result, Qualifier qualifier) {
-        LocalDate resultDate = utilService.stringToLocalDateTime(result.getDate());
-        LocalDate qualifierStart = utilService.stringToLocalDateTime(qualifier.getStartDate());
-        LocalDate qualifierEnd = utilService.stringToLocalDateTime(qualifier.getEndDate());
-
-        return !resultDate.isBefore(qualifierStart) && !resultDate.isAfter(qualifierEnd);
     }
 }

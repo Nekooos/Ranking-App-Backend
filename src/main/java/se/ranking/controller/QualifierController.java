@@ -24,16 +24,6 @@ public class QualifierController {
     @Autowired
     QualifierService qualifierService;
 
-    @PostMapping("/answer")
-    public ResponseEntity<?> saveQualifierAnswer(@RequestBody User user, @RequestBody Qualifier qualifier, @RequestBody boolean answer) {
-        try {
-            QualifierAnswer qualifierAnswer = qualifierService.saveQualifierAnswer(user, qualifier, answer);
-            return ResponseEntity.ok(qualifierAnswer);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @GetMapping("/qualified/{value}")
     public ResponseEntity<?> getQualifiedAndNotQualified(@RequestBody Qualifier qualifier) {
         List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(qualifier);
