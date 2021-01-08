@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
@@ -17,16 +18,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Email
+    @NotNull(message = "Email is required")
+    @Email(message = "Invalid Email")
     @Column(nullable = false)
     private String email;
     @JsonIgnore
     private String password;
     @Column(nullable = false, name ="first_name")
+    @NotNull(message = "First name is required")
     private String firstName;
     @Column(nullable = false, name = "last_name")
+    @NotNull(message = "Last name is required")
     private String lastName;
-    @NotNull
+    @NotNull(message = "gender is required")
     private String gender;
     private String club;
 

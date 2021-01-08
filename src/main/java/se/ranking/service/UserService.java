@@ -3,7 +3,7 @@ package se.ranking.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
-import se.ranking.exception.NotFoundException;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.model.UserResultsDto;
@@ -11,7 +11,7 @@ import se.ranking.model.UserResultsDto;
 import java.util.List;
 
 public interface UserService {
-    User findById(Long id) throws NotFoundException;
+    User findById(Long id) throws EntityNotFoundException;
     User save(UserDto user);
     List<User> findAll();
     User edit(Long id, User user) throws Exception;

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.ranking.exception.NotFoundException;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.CompetitionResultDto;
 import se.ranking.model.Result;
 import se.ranking.service.ResultService;
@@ -59,14 +59,9 @@ public class ResultController {
     }
 
     @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<?> patchResult(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
-        try {
-            Result result = resultService.patchResult(jsonPatch, id);
-            return ResponseEntity.ok().body(result);
-        } catch (JsonPatchException | JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> patchResult(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) throws JsonPatchException, JsonProcessingException {
+        Result result = resultService.patchResult(jsonPatch, id);
+        return ResponseEntity.ok().body(result);
+
     }
 }

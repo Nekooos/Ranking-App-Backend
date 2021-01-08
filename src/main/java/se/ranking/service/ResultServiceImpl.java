@@ -8,7 +8,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ranking.exception.NotFoundException;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.CompetitionResultDto;
 import se.ranking.model.Result;
 import se.ranking.repository.ResultRepository;
@@ -23,7 +23,7 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public Result findById(Long id) {
         return resultRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Result was not found"));
     }
 
     @Override
@@ -38,8 +38,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public Result edit(Long id, Result result) {
-        Result targetResult = resultRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        Result targetResult = this.findById(id);
         BeanUtils.copyProperties(result, targetResult, String.valueOf(id));
         return result;
     }
@@ -57,8 +56,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public Result patchResult(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
-        Result result = resultRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        Result result = this.findById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode patched = jsonPatch.apply(objectMapper.convertValue(result, JsonNode.class));

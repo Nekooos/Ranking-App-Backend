@@ -10,15 +10,15 @@ public class Qualifier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @NotNull(message = "name is required")
     private String name;
-    @NotNull
+    @NotNull(message = "Value to qualify is required")
     private String valueToQualify;
-    @NotNull
+    @NotNull(message = "Start date is required")
     private String startDate;
-    @NotNull
+    @NotNull(message = "End date is required")
     private String endDate;
-    @NotNull
+    @NotNull(message = "Discipline is required")
     private Discipline discipline;
 
     @OneToMany(mappedBy = "user")

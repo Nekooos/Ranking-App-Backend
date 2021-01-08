@@ -5,25 +5,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ranking.exception.NotFoundException;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.*;
 import se.ranking.repository.QualifierAnswerRepository;
 import se.ranking.repository.QualifierRepository;
 import se.ranking.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class QualifierServiceImpl implements QualifierService {
@@ -40,7 +34,7 @@ public class QualifierServiceImpl implements QualifierService {
     UtilService utilService;
 
     /*
-       TODO change to queries and more entities for each discipline
+       TODO change to queries and more entities for each discipline instead
     */
     @Override
     public List<Set<User>> getQualifiedAndNotQualified(Qualifier qualifier) {
@@ -89,9 +83,9 @@ public class QualifierServiceImpl implements QualifierService {
     }
 
     private boolean resultDateIsWithinQualifierDate(Result result, Qualifier qualifier) {
-        LocalDate resultDate = utilService.stringToLocalDateTime(result.getDate());
-        LocalDate qualifierStart = utilService.stringToLocalDateTime(qualifier.getStartDate());
-        LocalDate qualifierEnd = utilService.stringToLocalDateTime(qualifier.getEndDate());
+        LocalDate resultDate = utilService.stringToLocalDate(result.getDate());
+        LocalDate qualifierStart = utilService.stringToLocalDate(qualifier.getStartDate());
+        LocalDate qualifierEnd = utilService.stringToLocalDate(qualifier.getEndDate());
 
         return !resultDate.isBefore(qualifierStart) && !resultDate.isAfter(qualifierEnd);
     }
@@ -103,9 +97,9 @@ public class QualifierServiceImpl implements QualifierService {
     }
 
     @Override
-    public Qualifier findById(Long id) throws NotFoundException{
+    public Qualifier findById(Long id) throws EntityNotFoundException {
         return qualifierRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Qualifier not found"));
     }
 
     @Override
@@ -120,8 +114,7 @@ public class QualifierServiceImpl implements QualifierService {
 
     @Override
     public Qualifier edit(Long id, Qualifier qualifier) {
-        Qualifier targetQualifier = qualifierRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        Qualifier targetQualifier = this.findById(id);
         BeanUtils.copyProperties(qualifier, targetQualifier, String.valueOf(id));
         qualifierRepository.save(targetQualifier);
         return qualifier;
@@ -135,8 +128,7 @@ public class QualifierServiceImpl implements QualifierService {
 
     @Override
     public Qualifier patchQualifier(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
-        Qualifier qualifier = qualifierRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        Qualifier qualifier = this.findById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode patched = jsonPatch.apply(objectMapper.convertValue(qualifier, JsonNode.class));

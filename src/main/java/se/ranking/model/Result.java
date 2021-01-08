@@ -13,16 +13,16 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="result_id")
     private Long id;
-    @NotNull
-    private Discipline discipline;
-    @NotNull
-    private String reportedPerformance;
-    @NotNull
-    private String announcedPerformance;
-    @NotNull
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "discipline is required")
+    private Discipline discipline;
+    @NotNull(message = "Reported Performance is required")
+    private String reportedPerformance;
+    @NotNull(message = "Announced performance is required")
+    private String announcedPerformance;
+    @NotNull(message = "Points is required")
     private Double points;
-    @NotNull
+    @NotNull(message = "Card is required")
     @Enumerated(EnumType.STRING)
     private Card card;
 

@@ -8,7 +8,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ranking.exception.NotFoundException;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.model.UserResultsDto;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(NotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User was not found"));
     }
 
     @Override
@@ -54,8 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User patchUser(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
-        User user = userRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        User user = this.findById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode patched = jsonPatch.apply(objectMapper.convertValue(user, JsonNode.class));

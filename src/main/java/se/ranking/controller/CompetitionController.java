@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.ranking.exception.NotFoundException;
 import se.ranking.model.Competition;
 import se.ranking.service.CompetitionService;
 
@@ -22,13 +20,8 @@ public class CompetitionController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<?> saveCompetition(@RequestBody Competition competition) {
-        try {
-            Competition savedCompetition = competitionService.save(competition);
-            return ResponseEntity.ok(savedCompetition);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
+        Competition savedCompetition = competitionService.save(competition);
+        return ResponseEntity.ok(savedCompetition);
     }
 
     @GetMapping("/{id}")
@@ -50,24 +43,14 @@ public class CompetitionController {
     }
 
     @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<?> patchCompetition(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
-        try {
-            Competition competition = competitionService.patchCompetition(jsonPatch, id);
-            return ResponseEntity.ok().body(competition);
-        } catch (JsonPatchException | JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> patchCompetition(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) throws JsonPatchException, JsonProcessingException {
+        Competition competition = competitionService.patchCompetition(jsonPatch, id);
+        return ResponseEntity.ok().body(competition);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCompetition(@PathVariable("id") Long id) {
-        try {
-            competitionService.delete(id);
-            return ResponseEntity.ok().body("Competition was deleted");
-        } catch(NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        competitionService.delete(id);
+        return ResponseEntity.ok().body("Competition was deleted");
     }
 }

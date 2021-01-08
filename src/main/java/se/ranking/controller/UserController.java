@@ -6,14 +6,17 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import se.ranking.exception.NotFoundException;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.model.UserResultsDto;
 import se.ranking.service.UserService;
+import se.ranking.service.UtilService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,6 +25,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UtilService utilService;
 
     @GetMapping("/user-results/{id}")
     public ResponseEntity<?> getUserResults(@PathVariable("id") Long id) {
@@ -30,20 +35,19 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveUser(@RequestBody UserDto user) {
-        User savedUser = userService.save(user);
-        return ResponseEntity.ok(savedUser);
+    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto user, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return utilService.fieldErrorResponse();
+        } else {
+            User savedUser = userService.save(user);
+            return ResponseEntity.ok(savedUser);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable("id") Long id) throws NotFoundException {
-        User user;
-        try {
-            user = userService.findById(id);
-            return ResponseEntity.ok(user);
-        } catch(NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found", e);
-        }
+    public ResponseEntity<?> getUser(@PathVariable("id") Long id) throws EntityNotFoundException {
+        User user = userService.findById(id);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/all")
@@ -65,14 +69,9 @@ public class UserController {
     }
 
     @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<?> patchUser(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) {
-        try {
-            User user = userService.patchUser(jsonPatch, id);
-            return ResponseEntity.ok().body(user);
-        } catch (JsonPatchException | JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> patchUser(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) throws JsonPatchException, JsonProcessingException {
+        User user = userService.patchUser(jsonPatch, id);
+        return ResponseEntity.ok().body(user);
+
     }
 }

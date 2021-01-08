@@ -7,8 +7,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ranking.exception.NotFoundException;
-import se.ranking.model.Competition;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.Qualifier;
 import se.ranking.model.QualifierAnswer;
 import se.ranking.model.User;
@@ -38,7 +37,7 @@ public class QualifierAnswerServiceImpl implements QualifierAnswerService {
     }
 
     @Override
-    public QualifierAnswer patchQualifierAnswer(JsonPatch jsonPatch, Long id) throws NotFoundException, JsonPatchException, JsonProcessingException {
+    public QualifierAnswer patchQualifierAnswer(JsonPatch jsonPatch, Long id) throws EntityNotFoundException, JsonPatchException, JsonProcessingException {
         QualifierAnswer qualifierAnswer = this.findById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -49,8 +48,8 @@ public class QualifierAnswerServiceImpl implements QualifierAnswerService {
     }
 
     @Override
-    public QualifierAnswer findById(Long id) throws NotFoundException{
+    public QualifierAnswer findById(Long id) throws EntityNotFoundException {
         return qualifierAnswerRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Qualifier was not found"));
     }
 }

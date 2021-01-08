@@ -75,7 +75,7 @@ public class QualifierServiceTests {
         when(utilService.convertStringToSeconds(anyString()))
                 .thenCallRealMethod();
 
-        when(utilService.stringToLocalDateTime(anyString()))
+        when(utilService.stringToLocalDate(anyString()))
                 .thenCallRealMethod();
 
         List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(qualifier);

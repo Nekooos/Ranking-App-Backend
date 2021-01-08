@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,11 +18,19 @@ public class UtilServiceTests {
     }
 
     @Test
-    public void stringToLocalDateTime() {
+    public void stringToLocalDate() {
         String time = "2021-01-06";
-        LocalDate localDate = utilService.stringToLocalDateTime(time);
+        LocalDate localDate = utilService.stringToLocalDate(time);
         LocalDate expectedLocalDate = LocalDate.of(2021, 1, 6);
         assertEquals(expectedLocalDate, localDate);
+    }
+
+    @Test
+    public void localeDateTimeToString() {
+        LocalDateTime localDateTime = LocalDateTime.of(2021, 01, 06, 5,55,55);
+        String expected = "2021-01-06 5:55:55";
+        String testTime = utilService.localDateTimeToString(localDateTime);
+        assertEquals(expected, testTime);
     }
 
     @Test

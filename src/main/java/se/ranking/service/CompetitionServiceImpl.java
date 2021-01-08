@@ -8,7 +8,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ranking.exception.NotFoundException;
+import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.Competition;
 import se.ranking.repository.CompetitionRepository;
 
@@ -21,8 +21,8 @@ public class CompetitionServiceImpl implements CompetitionService {
     private CompetitionRepository competitionRepository;
 
     @Override
-    public Competition findById(Long id) throws NotFoundException {
-        return competitionRepository.findById(id).orElseThrow(NotFoundException::new);
+    public Competition findById(Long id) throws EntityNotFoundException {
+        return competitionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Competition not found"));
     }
 
     @Override
@@ -44,17 +44,17 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public void delete(Long id) throws NotFoundException{
+    public void delete(Long id) throws EntityNotFoundException {
         boolean competitionExists = competitionRepository.existsById(id);
         if(competitionExists) {
             competitionRepository.deleteById(id);
         } else {
-            throw new NotFoundException();
+            throw new EntityNotFoundException();
         }
     }
 
     @Override
-    public Competition patchCompetition(JsonPatch jsonPatch, Long id) throws NotFoundException, JsonPatchException, JsonProcessingException {
+    public Competition patchCompetition(JsonPatch jsonPatch, Long id) throws EntityNotFoundException, JsonPatchException, JsonProcessingException {
         Competition competition = this.findById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
