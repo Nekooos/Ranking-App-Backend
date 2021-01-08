@@ -121,4 +121,14 @@ public class TestUtil {
         qualifier.setEndDate("2021-01-03");
         return qualifier;
     }
+
+    public UserDto createUserDto(String email, String firstName, String lastName, String password, String gender) {
+        UserDto userDto = new UserDto();
+        userDto.setEmail(email);
+        userDto.setFirstName(firstName);
+        userDto.setLastName(lastName);
+        userDto.setPassword(password);
+        userDto.setGender(gender);
+        return userDto;
+    }
 }

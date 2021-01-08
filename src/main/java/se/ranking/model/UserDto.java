@@ -1,10 +1,20 @@
 package se.ranking.model;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class UserDto {
+    @NotNull(message = "Email is required")
+    @Email(message = "Email is not valid")
     private String email;
+    @NotNull(message = "Password is required")
     private String password;
+    @NotNull(message = "First name is required")
     private String firstName;
+    @NotNull(message = "Last name is required")
     private String lastName;
+    @NotNull(message = "Gender is required")
     private String gender;
 
     public String getEmail() {

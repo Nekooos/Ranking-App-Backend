@@ -35,13 +35,9 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto user, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return utilService.fieldErrorResponse();
-        } else {
-            User savedUser = userService.save(user);
-            return ResponseEntity.ok(savedUser);
-        }
+    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto user) {
+        User savedUser = userService.save(user);
+        return ResponseEntity.ok(savedUser);
     }
 
     @GetMapping("/{id}")

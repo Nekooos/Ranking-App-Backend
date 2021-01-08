@@ -63,6 +63,7 @@ public class JsonExceptionHandler {
     public ResponseEntity<Object> handleForm(MethodArgumentNotValidException methodArgumentNotValidException) {
         BindingResult bindingResult = methodArgumentNotValidException.getBindingResult();
         List<FieldErrorDto> fieldErrors = processFieldErrors(bindingResult.getFieldErrors());
+        fieldErrors.forEach(e -> System.out.println(e.getField() + e.getMessage() + e.getObjectName() + e.getFieldErrors()));
         return ResponseEntity.status(BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorResponseDto(fieldErrors,"Form validation failed"));
@@ -70,6 +71,7 @@ public class JsonExceptionHandler {
 
     private List<FieldErrorDto> processFieldErrors(List<FieldError> fieldErrors) {
         return fieldErrors.stream()
+                .peek(e-> System.out.println(e.getCode() + e.getField()+ e.getDefaultMessage()))
                 .map(fieldError -> new FieldErrorDto(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode()))
                 .collect(Collectors.toList());
     }

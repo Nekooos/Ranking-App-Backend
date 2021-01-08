@@ -20,7 +20,7 @@ public class ErrorResponseDto {
         this.fieldErrors = fieldErrors;
         this.message = message;
     }
-
+/*
     public ErrorResponseDto(String message, Throwable cause, String causeMessage, String stackTrace, String dateTime) {
         this.message = message;
         this.cause = cause;
@@ -28,7 +28,7 @@ public class ErrorResponseDto {
         this.stackTrace = stackTrace;
         this.dateTime = dateTime;
     }
-
+*/
     public String getMessage() {
         return message;
     }

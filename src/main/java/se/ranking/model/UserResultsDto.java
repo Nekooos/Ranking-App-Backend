@@ -3,16 +3,16 @@ package se.ranking.model;
 public class UserResultsDto {
     private Long id;
     private String name;
-    private String discipline;
+    private Discipline discipline;
     private String reportedPerformance;
     private String announcedPerformance;
-    private double points;
-    private String card;
+    private Double points;
+    private Card card;
     private String remarks;
     private String date;
     private String endDate;
 
-    public UserResultsDto(Long id, String name, String discipline, String reportedPerformance, String announcedPerformance, double points, String card, String remarks, String date, String endDate) {
+    public UserResultsDto(Long id, String name, Discipline discipline, String reportedPerformance, String announcedPerformance, Double points, Card card, String remarks, String date, String endDate) {
         this.id = id;
         this.name = name;
         this.discipline = discipline;
@@ -41,11 +41,11 @@ public class UserResultsDto {
         this.name = name;
     }
 
-    public String getDiscipline() {
+    public Discipline getDiscipline() {
         return discipline;
     }
 
-    public void setDiscipline(String discipline) {
+    public void setDiscipline(Discipline discipline) {
         this.discipline = discipline;
     }
 
@@ -65,19 +65,19 @@ public class UserResultsDto {
         this.announcedPerformance = announcedPerformance;
     }
 
-    public double getPoints() {
+    public Double getPoints() {
         return points;
     }
 
-    public void setPoints(double points) {
+    public void setPoints(Double points) {
         this.points = points;
     }
 
-    public String getCard() {
+    public Card getCard() {
         return card;
     }
 
-    public void setCard(String card) {
+    public void setCard(Card card) {
         this.card = card;
     }
 
