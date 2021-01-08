@@ -1,25 +1,16 @@
 package se.ranking.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FieldErrorDto {
     private final String objectName;
     private final String field;
-    private final String message;
-    private List<FieldErrorDto> fieldErrors;
+    private final String fieldAnnotation;
+    private final String errorMessage;
 
-    public FieldErrorDto(String objectName, String field, String message) {
+    public FieldErrorDto(String objectName, String field, String fieldAnnotation, String errorMessage) {
         this.objectName = objectName;
         this.field = field;
-        this.message = message;
-    }
-
-    public void add(String objectName, String field, String message) {
-        if (fieldErrors == null) {
-            fieldErrors = new ArrayList<>();
-        }
-        fieldErrors.add(new FieldErrorDto(objectName, field, message));
+        this.fieldAnnotation = fieldAnnotation;
+        this.errorMessage = errorMessage;
     }
 
     public String getObjectName() {
@@ -30,11 +21,9 @@ public class FieldErrorDto {
         return field;
     }
 
-    public String getMessage() {
-        return message;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public List<FieldErrorDto> getFieldErrors() {
-        return fieldErrors;
-    }
+    public String getFieldAnnotation() { return fieldAnnotation; }
 }

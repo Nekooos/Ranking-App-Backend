@@ -20,6 +20,7 @@ import se.ranking.util.TestUtil;
 import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -40,9 +41,9 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("POST user/save")
-    public void saveValidUser() throws Exception {
-        UserDto userDto = testUtil.createUserDto("valid@mail.com", "John", "Doe", "password", "male");
+    @DisplayName("POST user/save throws MethodArgumentNotValidException")
+    public void saveNotValidUser() throws Exception {
+        UserDto userDto = testUtil.createUserDto("notValid@.Mail.com", null, "Doe", "password", "male");
 
         Mockito.when(userService.save(userDto))
                 .thenAnswer(i -> i.getArguments()[0]);
@@ -51,13 +52,19 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(userDto))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(jsonPath("$.message").value("Form validation failed"))
+                .andExpect(jsonPath("$.fieldErrors").isArray())
+                .andExpect(jsonPath("$.fieldErrors[?(@.field == \"firstName\")]").exists())
+                .andExpect(jsonPath("$.fieldErrors[?(@.field == \"email\")]").exists())
+                .andExpect(jsonPath("$.fieldErrors[?(@.errorMessage == \"Email is not valid\")]").exists())
+                .andExpect(jsonPath("$.fieldErrors[?(@.errorMessage == \"First name is required\")]").exists())
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
-    @DisplayName("POST user/save throws MethodArgumentNotValidException")
-    public void saveNotValidUser() throws Exception {
-        UserDto userDto = testUtil.createUserDto("notValidMail.com", "null", "Doe", "password", "male");
+    @DisplayName("POST user/save")
+    public void saveValidUser() throws Exception {
+        UserDto userDto = testUtil.createUserDto("valid@mail.com", "John", "Doe", "password", "male");
 
         Mockito.when(userService.save(userDto))
                 .thenAnswer(i -> i.getArguments()[0]);
