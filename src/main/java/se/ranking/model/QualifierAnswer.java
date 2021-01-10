@@ -9,6 +9,7 @@ public class QualifierAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private boolean answer;
+    private boolean qualified;
     private LocalDateTime date;
 
     @ManyToOne
@@ -57,5 +58,13 @@ public class QualifierAnswer {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public boolean isQualified() {
+        return qualified;
+    }
+
+    public void setQualified(boolean qualified) {
+        this.qualified = qualified;
     }
 }

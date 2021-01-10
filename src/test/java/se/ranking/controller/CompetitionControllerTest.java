@@ -20,6 +20,7 @@ import se.ranking.util.TestUtil;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -56,6 +57,27 @@ class CompetitionControllerTest {
                 .content(json)
                 .contentType("application/json-patch+json"))
                 .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    @DisplayName("POST competition/save throws MethodArgumentNotValidException date regex")
+    public void saveNotValidCompetitionDate() throws Exception {
+        Competition competition = testUtil.createCustomCompetition(1L, "Göteborg", "Sweden", "2021-13-01", "2021-06-3", "SM", "Angered Simhall", "SM i Göteborg", Collections.emptyList(), Collections.emptyList());
+
+        when(competitionService.save(competition))
+                .thenAnswer(i -> i.getArguments()[0]);
+
+        mockMvc.perform(post("/competition/save")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(competition))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.message").value("Form validation failed"))
+                .andExpect(jsonPath("$.fieldErrors").isArray())
+                .andExpect(jsonPath("$.fieldErrors.size()").value(2))
+                .andExpect(jsonPath("$.fieldErrors[?(@.field == \"date\")]").exists())
+                .andExpect(jsonPath("$.fieldErrors[?(@.objectName == \"competition\")]").exists())
+                .andExpect(jsonPath("$.fieldErrors[?(@.errorMessage == \"Date must match yyyy-MM-dd\")]").exists())
+                .andExpect(status().is4xxClientError());
     }
 
     @Test

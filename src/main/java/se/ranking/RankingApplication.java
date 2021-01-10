@@ -79,8 +79,8 @@ public class RankingApplication {
 	public static Competition createEvent(int i, UserRepository userRepository) {
 		Competition competition = new Competition();
 		competition.setName("competitionName"+i);
-		competition.setDate(LocalDate.now().toString());
-		competition.setEndDate(LocalDate.now().toString());
+		competition.setDate("2021-06-01");
+		competition.setEndDate("2021-06-03");
 		competition.setCountry("Sweden");
 		competition.setCity("Göteborg");
 		competition.setLocation("Simhall");
@@ -132,16 +132,4 @@ public class RankingApplication {
 			return Card.WHITE;
 		}
 	}
-
-	private static String discipline(int i) {
-		if(i % 3==0)
-			return "STA";
-		else if(i % 3 == 1) {
-			return "FENA";
-		}
-		else {
-			return "UTAN";
-		}
-	}
-
 }

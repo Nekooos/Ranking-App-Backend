@@ -19,4 +19,5 @@ public interface QualifierService {
     Qualifier delete(Qualifier qualifier);
     Qualifier patchQualifier(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
     List<Set<User>> getQualifiedAndNotQualified(Qualifier qualifier);
+    Qualifier saveWithAllUsers(Qualifier qualifier);
 }

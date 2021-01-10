@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import se.ranking.model.Competition;
 import se.ranking.service.CompetitionService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class CompetitionController {
     private CompetitionService competitionService;
 
     @PostMapping(value = "/save")
-    public ResponseEntity<?> saveCompetition(@RequestBody Competition competition) {
+    public ResponseEntity<?> saveCompetition(@Valid @RequestBody Competition competition) {
         Competition savedCompetition = competitionService.save(competition);
         return ResponseEntity.ok(savedCompetition);
     }

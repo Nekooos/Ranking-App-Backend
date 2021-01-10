@@ -5,6 +5,7 @@ import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,7 +28,7 @@ public class Result {
     private Card card;
 
     private String remarks;
-
+    @Pattern(regexp = "^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$", message ="Date must match yyyy-MM-dd")
     private String date;
 
     @Column(insertable = false, updatable = false)

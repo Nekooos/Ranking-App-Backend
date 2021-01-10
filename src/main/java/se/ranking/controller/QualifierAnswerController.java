@@ -23,7 +23,6 @@ public class QualifierAnswerController {
     public ResponseEntity<?> saveQualifierAnswer(@RequestBody User user, @RequestBody Qualifier qualifier, @RequestBody boolean answer) {
         QualifierAnswer qualifierAnswer = qualifierAnswerService.saveQualifierAnswer(user, qualifier, answer);
         return ResponseEntity.ok(qualifierAnswer);
-
     }
 
     /**

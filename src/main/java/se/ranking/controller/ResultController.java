@@ -12,6 +12,7 @@ import se.ranking.model.CompetitionResultDto;
 import se.ranking.model.Result;
 import se.ranking.service.ResultService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class ResultController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveResult(@RequestBody Result result) {
+    public ResponseEntity<?> saveResult(@Valid @RequestBody Result result) {
         Result savedResult = resultService.save(result);
         return ResponseEntity.ok(savedResult);
     }

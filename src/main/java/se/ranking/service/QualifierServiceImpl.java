@@ -108,6 +108,22 @@ public class QualifierServiceImpl implements QualifierService {
     }
 
     @Override
+    public Qualifier saveWithAllUsers(Qualifier qualifier) {
+        List<Set<User>> userSets = this.getQualifiedAndNotQualified(qualifier);
+        userSets.get(0).forEach(user -> qualifierAnswerRepository.save(createQualifierAnswer(user, qualifier, true)));
+        userSets.get(1).forEach(user -> qualifierAnswerRepository.save(createQualifierAnswer(user, qualifier, false)));
+        return qualifierRepository.save(qualifier);
+    }
+
+    private QualifierAnswer createQualifierAnswer(User user, Qualifier qualifier, boolean isQualified) {
+        QualifierAnswer qualifierAnswer = new QualifierAnswer();
+        qualifierAnswer.setUser(user);
+        qualifierAnswer.setQualifier(qualifier);
+        qualifierAnswer.setQualified(isQualified);
+        return qualifierAnswer;
+    }
+
+    @Override
     public List<Qualifier> findAll() {
         return qualifierRepository.findAll();
     }

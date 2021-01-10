@@ -12,6 +12,7 @@ import se.ranking.model.Qualifier;
 import se.ranking.model.User;
 import se.ranking.service.QualifierService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class QualifierController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveQualifier(@RequestBody Qualifier qualifier) {
+    public ResponseEntity<?> saveQualifier(@Valid @RequestBody Qualifier qualifier) {
         Qualifier savedQualifier = qualifierService.save(qualifier);
         return ResponseEntity.ok(savedQualifier);
     }

@@ -95,6 +95,21 @@ public class TestUtil {
         return result;
     }
 
+    public Competition createCustomCompetition(long id, String city, String country, String date, String endDate, String eventType, String location, String name, List<User> users, List<Result> results) {
+        Competition competition = new Competition();
+        competition.setId(id);
+        competition.setCity(city);
+        competition.setCountry(country);
+        competition.setDate(date);
+        competition.setEndDate(endDate);
+        competition.setEventType(eventType);
+        competition.setLocation(location);
+        competition.setName(name);
+        competition.setUsers(users);
+        competition.setResults(results);
+        return competition;
+    }
+
     private double randomTimeAndPoints() {
         Random random = new Random();
         return random.nextInt(100)+1;
