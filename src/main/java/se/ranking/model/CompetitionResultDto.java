@@ -11,4 +11,5 @@ public interface CompetitionResultDto {
     String getCard();
     String getRemarks();
     Long getResult_id();
+    String getGender();
 }

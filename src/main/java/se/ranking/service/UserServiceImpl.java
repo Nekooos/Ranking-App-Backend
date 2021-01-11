@@ -9,9 +9,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
+import se.ranking.model.NotRegisteredUser;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.model.UserResultsDto;
+import se.ranking.repository.NotRegisteredUserRepository;
 import se.ranking.repository.UserRepository;
 
 import java.util.List;
@@ -21,6 +23,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    NotRegisteredUserRepository notRegisteredUserRepository;
 
     @Override
     public User findById(Long id) {
@@ -66,6 +70,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResultsDto> getUserResults(Long id) {
         return userRepository.getUserResults(id);
+    }
+
+    @Override
+    public NotRegisteredUser saveNotRegisteredUser(NotRegisteredUser user) {
+        return notRegisteredUserRepository.save(user);
     }
 
     private User createUserFromUserDto(UserDto userdto) {

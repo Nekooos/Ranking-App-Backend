@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "(c.id, c.name, r.discipline, r.reportedPerformance, r.announcedPerformance, r.points, r.card, r.remarks, r.date) "+
             "FROM Result r "+
             "JOIN r.competition c "+
-            "WHERE r.userId = :userId")
+            "WHERE r.userId = :userId OR r.notRegisteredUserId = :userId")
     List<UserResultsDto> getUserResults(@Param("userId") Long id);
 }
 /*

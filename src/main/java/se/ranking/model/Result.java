@@ -35,12 +35,20 @@ public class Result {
     private Long userId;
 
     @Column(insertable = false, updatable = false)
+    private Long notRegisteredUserId;
+
+    @Column(insertable = false, updatable = false)
     private Long competitionId;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notRegisteredUserId")
+    private NotRegisteredUser notRegisteredUser;
 
     @JsonBackReference(value = "competition")
     @ManyToOne(fetch= FetchType.LAZY)

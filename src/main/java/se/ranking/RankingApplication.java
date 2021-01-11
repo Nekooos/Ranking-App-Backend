@@ -100,6 +100,7 @@ public class RankingApplication {
 		result.setCompetition(competitionRepository.findById(1L).get());
 		result.setReportedPerformance(String.valueOf(randomTimeAndPoints()));
 		result.setRemarks("remark");
+		result.setDate("2021-06-03");
 		return result;
 	}
 
@@ -114,6 +115,8 @@ public class RankingApplication {
 		qualifier.setName("qualifier1");
 		qualifier.setValueToQualify("5.05");
 		qualifier.setId(1L);
+		qualifier.setStartDate("2021-01-01");
+		qualifier.setEndDate("2021-12-31");
 		qualifierRepository.save(qualifier);
 	}
 

@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import se.ranking.exception.EntityNotFoundException;
+import se.ranking.model.NotRegisteredUser;
 import se.ranking.model.User;
 import se.ranking.model.UserDto;
 import se.ranking.model.UserResultsDto;
@@ -37,6 +38,12 @@ public class UserController {
     @PostMapping("/save")
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto user) {
         User savedUser = userService.save(user);
+        return ResponseEntity.ok(savedUser);
+    }
+
+    @PostMapping("/save-not-registered-user")
+    public ResponseEntity<?> saveNotRegisteredUser(@Valid @RequestBody NotRegisteredUser user) {
+        NotRegisteredUser savedUser = userService.saveNotRegisteredUser(user);
         return ResponseEntity.ok(savedUser);
     }
 
