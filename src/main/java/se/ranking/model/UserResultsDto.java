@@ -10,9 +10,9 @@ public class UserResultsDto {
     private Card card;
     private String remarks;
     private String date;
-    private String endDate;
 
-    public UserResultsDto(Long id, String name, Discipline discipline, String reportedPerformance, String announcedPerformance, Double points, Card card, String remarks, String date, String endDate) {
+
+    public UserResultsDto(Long id, String name, Discipline discipline, String reportedPerformance, String announcedPerformance, Double points, Card card, String remarks, String date) {
         this.id = id;
         this.name = name;
         this.discipline = discipline;
@@ -22,7 +22,6 @@ public class UserResultsDto {
         this.card = card;
         this.remarks = remarks;
         this.date = date;
-        this.endDate = endDate;
     }
 
     public Long getId() {
@@ -95,13 +94,5 @@ public class UserResultsDto {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 }
