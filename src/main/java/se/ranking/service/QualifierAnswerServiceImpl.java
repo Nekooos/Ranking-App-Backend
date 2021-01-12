@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.Qualifier;
 import se.ranking.model.QualifierAnswer;
-import se.ranking.model.User;
+import se.ranking.model.RegisteredUser;
 import se.ranking.repository.QualifierAnswerRepository;
 import se.ranking.repository.UserRepository;
 
@@ -27,9 +27,9 @@ public class QualifierAnswerServiceImpl implements QualifierAnswerService {
     private UtilService utilService;
 
     @Override
-    public QualifierAnswer saveQualifierAnswer(User user, Qualifier qualifier, boolean answer) {
+    public QualifierAnswer saveQualifierAnswer(RegisteredUser registeredUser, Qualifier qualifier, boolean answer) {
         QualifierAnswer qualifierAnswer = new QualifierAnswer();
-        qualifierAnswer.setUser(user);
+        qualifierAnswer.setUser(registeredUser);
         qualifierAnswer.setQualifier(qualifier);
         qualifierAnswer.setAnswer(answer);
         qualifierAnswer.setDate(LocalDateTime.now());

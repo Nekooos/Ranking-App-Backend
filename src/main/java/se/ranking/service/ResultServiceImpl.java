@@ -9,11 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
-import se.ranking.model.Competition;
-import se.ranking.model.CompetitionResultDto;
-import se.ranking.model.Result;
-import se.ranking.model.User;
-import se.ranking.repository.CompetitionRepository;
+import se.ranking.model.*;
+import se.ranking.repository.NotRegisteredUserRepository;
 import se.ranking.repository.ResultRepository;
 import se.ranking.repository.UserRepository;
 
@@ -26,15 +23,30 @@ public class ResultServiceImpl implements ResultService {
     @Autowired
     private CompetitionService competitionService;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private UserService userService;
+    @Autowired
+    private NotRegisteredUserRepository notRegisteredUserRepository;
 
     @Override
     public Result saveResultWithCompetitionAndUser(Result result, Long userId, Long competitionId) {
-        User user = userService.findById(userId);
+        RegisteredUser registeredUser = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User was not found"));
         Competition competition = competitionService.findById(competitionId);
-        result.setUser(user);
+        result.setUser(registeredUser);
         result.setCompetition(competition);
+        competitionService.editIfUserDoesNotExists(registeredUser, competition);
+        return resultRepository.save(result);
+    }
+
+    @Override
+    public Result saveResultWithNotRegisteredUser(Result result, NotRegisteredUser user, Long competitionId) {
+        userService.save(user);
+        Competition competition = competitionService.findById(competitionId);
         competitionService.editIfUserDoesNotExists(user, competition);
+        result.setNotRegisteredUser(user);
+        result.setCompetition(competition);
         return resultRepository.save(result);
     }
 

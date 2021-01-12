@@ -5,15 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import se.ranking.model.User;
+import se.ranking.model.RegisteredUser;
 import se.ranking.model.UserResultsDto;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+public interface UserRepository extends JpaRepository<RegisteredUser, Long> {
+    Optional<RegisteredUser> findByEmail(String email);
 
     Boolean existsByEmail(String email);
 

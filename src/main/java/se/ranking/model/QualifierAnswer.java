@@ -14,7 +14,7 @@ public class QualifierAnswer {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user;
+    RegisteredUser registeredUser;
 
     @ManyToOne
     @JoinColumn(name = "qualifier_id")
@@ -36,12 +36,12 @@ public class QualifierAnswer {
         this.answer = answer;
     }
 
-    public User getUser() {
-        return user;
+    public RegisteredUser getUser() {
+        return registeredUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(RegisteredUser registeredUser) {
+        this.registeredUser = registeredUser;
     }
 
     public Qualifier getQualifier() {

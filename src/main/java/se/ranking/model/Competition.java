@@ -1,9 +1,6 @@
 package se.ranking.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -32,7 +29,15 @@ public class Competition {
             joinColumns = {@JoinColumn(name = "competition_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private List<User> users;
+    private List<RegisteredUser> registeredUsers;
+
+    @ManyToMany
+    @JoinTable(
+            name = "competition_not_registered_user",
+            joinColumns = {@JoinColumn(name = "competition_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
+    private List<NotRegisteredUser> notRegisteredUsers;
 
     @JsonManagedReference(value = "competition")
     @OneToMany(mappedBy = "competition")
@@ -102,12 +107,12 @@ public class Competition {
         this.eventType = eventType;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<RegisteredUser> getUsers() {
+        return registeredUsers;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUsers(List<RegisteredUser> registeredUsers) {
+        this.registeredUsers = registeredUsers;
     }
 
     public List<Result> getResults() {
@@ -116,5 +121,13 @@ public class Competition {
 
     public void setResults(List<Result> results) {
         this.results = results;
+    }
+
+    public List<NotRegisteredUser> getNotRegisteredUsers() {
+        return notRegisteredUsers;
+    }
+
+    public void setNotRegisteredUsers(List<NotRegisteredUser> notRegisteredUsers) {
+        this.notRegisteredUsers = notRegisteredUsers;
     }
 }

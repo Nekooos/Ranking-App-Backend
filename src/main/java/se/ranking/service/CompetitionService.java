@@ -5,7 +5,8 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.Competition;
-import se.ranking.model.User;
+import se.ranking.model.NotRegisteredUser;
+import se.ranking.model.RegisteredUser;
 
 import java.util.List;
 
@@ -16,5 +17,6 @@ public interface CompetitionService {
     Competition edit(Long id, Competition competition) throws Exception;
     void delete(Long id);
     Competition patchCompetition(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
-    Competition editIfUserDoesNotExists(User user, Competition competition);
+    Competition editIfUserDoesNotExists(RegisteredUser registeredUser, Competition competition);
+    Competition editIfUserDoesNotExists(NotRegisteredUser user, Competition competition);
 }

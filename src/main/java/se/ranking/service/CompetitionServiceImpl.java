@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.Competition;
-import se.ranking.model.User;
+import se.ranking.model.NotRegisteredUser;
+import se.ranking.model.RegisteredUser;
 import se.ranking.repository.CompetitionRepository;
 import se.ranking.repository.UserRepository;
 
@@ -30,23 +31,45 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Competition editIfUserDoesNotExists(User user, Competition competition) {
-        boolean userExists = userExistsInCompetition(user, competition);
+    public Competition editIfUserDoesNotExists(RegisteredUser registeredUser, Competition competition) {
+        boolean userExists = userExistsInCompetition(registeredUser, competition);
         if(!userExists) {
-            List<User> users = addUserToCompetition(user, competition);
-            competition.setUsers(users);
+            List<RegisteredUser> registeredUsers = addUserToCompetition(registeredUser, competition);
+            competition.setUsers(registeredUsers);
             this.edit(competition.getId(), competition);
         }
         return competition;
     }
 
-    private List<User> addUserToCompetition(final User user, final Competition competition) {
-        List<User> users = competition.getUsers();
+    @Override
+    public Competition editIfUserDoesNotExists(NotRegisteredUser user, Competition competition) {
+        boolean userExists = userExistsInCompetition(user, competition);
+        if(!userExists) {
+            List<NotRegisteredUser> users = addUserToCompetition(user, competition);
+            competition.setNotRegisteredUsers(users);
+            this.edit(competition.getId(), competition);
+        }
+        return competition;
+    }
+
+    private List<RegisteredUser> addUserToCompetition(final RegisteredUser registeredUser, final Competition competition) {
+        List<RegisteredUser> registeredUsers = competition.getUsers();
+        registeredUsers.add(registeredUser);
+        return registeredUsers;
+    }
+
+    private List<NotRegisteredUser> addUserToCompetition(final NotRegisteredUser user, final Competition competition) {
+        List<NotRegisteredUser> users = competition.getNotRegisteredUsers();
         users.add(user);
         return users;
     }
 
-    private boolean userExistsInCompetition(final User user, final Competition competition) {
+    private boolean userExistsInCompetition(final RegisteredUser registeredUser, final Competition competition) {
+        return competition.getUsers().stream()
+                .anyMatch(competitionUser -> competitionUser.equals(registeredUser));
+    }
+
+    private boolean userExistsInCompetition(final NotRegisteredUser user, final Competition competition) {
         return competition.getUsers().stream()
                 .anyMatch(competitionUser -> competitionUser.equals(user));
     }

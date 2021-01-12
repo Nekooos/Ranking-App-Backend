@@ -78,13 +78,13 @@ public class QualifierServiceTests {
         when(utilService.stringToLocalDate(anyString()))
                 .thenCallRealMethod();
 
-        List<Set<User>> users = qualifierService.getQualifiedAndNotQualified(qualifier);
+        List<Set<RegisteredUser>> users = qualifierService.getQualifiedAndNotQualified(qualifier);
 
         assertEquals(2, users.get(0).size());
         assertEquals(4, users.get(1).size());
     }
 
-    private List<User> createTestUsers() {
+    private List<RegisteredUser> createTestUsers() {
         Result result1 = testUtil.createCustomResult(1L, Discipline.STA, Card.WHITE, "3:45.4", "4:21.7", 55.4, "2020-04-03");
         Result result2 = testUtil.createCustomResult(2L, Discipline.STA, Card.RED, "3:45.4", "4:55.7", 64.4, "2020-04-03");
         Result result3 = testUtil.createCustomResult(3L, Discipline.FEN, Card.WHITE, "3:45.4", "4:21.7", 55.4, "2020-08-01");
@@ -96,12 +96,12 @@ public class QualifierServiceTests {
         Result result9 = testUtil.createCustomResult(9L, Discipline.STA, Card.WHITE, "5:45.4", "6:55.7", 78.4, "2019-01-25");
         Result result10 = testUtil.createCustomResult(10L, Discipline.STA, Card.WHITE, "5:45.4", "6:55.7", 78.4, "2022-01-25");
 
-        User user1 = testUtil.createUser(1, Arrays.asList(result1, result2));
-        User user2 = testUtil.createUser(2, Arrays.asList(result3, result4));
-        User user3 = testUtil.createUser(3, Arrays.asList(result5, result6));
-        User user4 = testUtil.createUser(4, Arrays.asList(result8, result7));
-        User user5 = testUtil.createUser(5, Arrays.asList(result9));
-        User user6 = testUtil.createUser(6, Arrays.asList(result9));
+        RegisteredUser registeredUser1 = testUtil.createUser(1, Arrays.asList(result1, result2));
+        RegisteredUser registeredUser2 = testUtil.createUser(2, Arrays.asList(result3, result4));
+        RegisteredUser registeredUser3 = testUtil.createUser(3, Arrays.asList(result5, result6));
+        RegisteredUser registeredUser4 = testUtil.createUser(4, Arrays.asList(result8, result7));
+        RegisteredUser registeredUser5 = testUtil.createUser(5, Arrays.asList(result9));
+        RegisteredUser registeredUser6 = testUtil.createUser(6, Arrays.asList(result9));
 
         result1.setUserId(1L);
         result2.setUserId(1L);
@@ -114,6 +114,6 @@ public class QualifierServiceTests {
         result9.setUserId(5L);
         result10.setUserId(6L);
 
-        return Arrays.asList(user1, user2, user3, user4, user5, user6);
+        return Arrays.asList(registeredUser1, registeredUser2, registeredUser3, registeredUser4, registeredUser5, registeredUser6);
     }
 }

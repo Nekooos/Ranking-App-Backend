@@ -9,10 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
-import se.ranking.model.NotRegisteredUser;
-import se.ranking.model.User;
-import se.ranking.model.UserDto;
-import se.ranking.model.UserResultsDto;
+import se.ranking.model.*;
 import se.ranking.repository.NotRegisteredUserRepository;
 import se.ranking.repository.UserRepository;
 
@@ -27,44 +24,52 @@ public class UserServiceImpl implements UserService {
     NotRegisteredUserRepository notRegisteredUserRepository;
 
     @Override
-    public User findById(Long id) {
+    public RegisteredUser findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User was not found"));
     }
 
     @Override
-    public User save(UserDto userDto) {
-        User user = createUserFromUserDto(userDto);
-        return userRepository.save(user);
+    public RegisteredUser save(UserDto userDto) {
+        RegisteredUser registeredUser = createUserFromUserDto(userDto);
+        return userRepository.save(registeredUser);
+    }
+
+    public NotRegisteredUser save(NotRegisteredUser user) {
+        boolean userExists = notRegisteredUserRepository.existsById(user.getId());
+        if(!userExists) {
+            return notRegisteredUserRepository.save(user);
+        }
+        return user;
     }
 
     @Override
-    public List<User> findAll() {
+    public List<RegisteredUser> findAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public User edit(Long id, User user) throws Exception {
-        User targetUser = this.findById(id);
-        BeanUtils.copyProperties(user, targetUser, String.valueOf(id));
-        userRepository.save(targetUser);
-        return user;
+    public RegisteredUser edit(Long id, RegisteredUser registeredUser) throws Exception {
+        RegisteredUser targetRegisteredUser = this.findById(id);
+        BeanUtils.copyProperties(registeredUser, targetRegisteredUser, String.valueOf(id));
+        userRepository.save(targetRegisteredUser);
+        return registeredUser;
     }
 
     @Override
-    public User delete(User user) {
-        userRepository.delete(user);
-        return user;
+    public RegisteredUser delete(RegisteredUser registeredUser) {
+        userRepository.delete(registeredUser);
+        return registeredUser;
     }
 
     @Override
-    public User patchUser(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
-        User user = this.findById(id);
+    public RegisteredUser patchUser(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException {
+        RegisteredUser registeredUser = this.findById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode patched = jsonPatch.apply(objectMapper.convertValue(user, JsonNode.class));
-        User patchedUser = objectMapper.treeToValue(patched, User.class);
+        JsonNode patched = jsonPatch.apply(objectMapper.convertValue(registeredUser, JsonNode.class));
+        RegisteredUser patchedRegisteredUser = objectMapper.treeToValue(patched, RegisteredUser.class);
 
-        return userRepository.save(patchedUser);
+        return userRepository.save(patchedRegisteredUser);
     }
 
     @Override
@@ -77,13 +82,13 @@ public class UserServiceImpl implements UserService {
         return notRegisteredUserRepository.save(user);
     }
 
-    private User createUserFromUserDto(UserDto userdto) {
-        User user = new User();
-        user.setEmail(userdto.getEmail());
-        user.setPassword(userdto.getPassword());
-        user.setGender(userdto.getGender());
-        user.setFirstName(userdto.getFirstName());
-        user.setLastName(userdto.getLastName());
-        return user;
+    private RegisteredUser createUserFromUserDto(UserDto userdto) {
+        RegisteredUser registeredUser = new RegisteredUser();
+        registeredUser.setEmail(userdto.getEmail());
+        registeredUser.setPassword(userdto.getPassword());
+        registeredUser.setGender(userdto.getGender());
+        registeredUser.setFirstName(userdto.getFirstName());
+        registeredUser.setLastName(userdto.getLastName());
+        return registeredUser;
     }
 }

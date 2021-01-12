@@ -1,12 +1,10 @@
 package se.ranking.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
 
 @Entity
 public class Result {
@@ -43,7 +41,7 @@ public class Result {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private User user;
+    private RegisteredUser registeredUser;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -135,12 +133,12 @@ public class Result {
         this.competitionId = competitionId;
     }
 
-    public User getUser() {
-        return user;
+    public RegisteredUser getUser() {
+        return registeredUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(RegisteredUser registeredUser) {
+        this.registeredUser = registeredUser;
     }
 
     public Competition getCompetition() {
@@ -149,5 +147,13 @@ public class Result {
 
     public void setCompetition(Competition competition) {
         this.competition = competition;
+    }
+
+    public NotRegisteredUser getNotRegisteredUser() {
+        return notRegisteredUser;
+    }
+
+    public void setNotRegisteredUser(NotRegisteredUser notRegisteredUser) {
+        this.notRegisteredUser = notRegisteredUser;
     }
 }

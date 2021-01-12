@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import se.ranking.model.CompetitionResultDto;
+import se.ranking.model.NotRegisteredUser;
 import se.ranking.model.Result;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ResultService {
     List<CompetitionResultDto> getCompetitionResultsById(Long id);
     Result patchResult(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
     Result saveResultWithCompetitionAndUser(Result result, Long userId, Long competitionId);
+    Result saveResultWithNotRegisteredUser(Result result, NotRegisteredUser notRegisteredUser, Long competitionId);
 }
+

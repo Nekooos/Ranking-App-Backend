@@ -14,9 +14,7 @@ import se.ranking.repository.UserRepository;
 import se.ranking.service.CompetitionService;
 import se.ranking.service.ResultService;
 
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -66,14 +64,14 @@ public class RankingApplication {
 		});
 	}
 
-	public static User createUser(int i) {
-		User user = new User();
-		user.setFirstName("firstName"+i);
-		user.setLastName("lastName"+i);
-		user.setEmail("test"+i+"@mail.com");
-		user.setPassword("password");
-		user.setGender(i % 2 == 0 ? "Male" : "Female");
-		return user;
+	public static RegisteredUser createUser(int i) {
+		RegisteredUser registeredUser = new RegisteredUser();
+		registeredUser.setFirstName("firstName"+i);
+		registeredUser.setLastName("lastName"+i);
+		registeredUser.setEmail("test"+i+"@mail.com");
+		registeredUser.setPassword("password");
+		registeredUser.setGender(i % 2 == 0 ? "Male" : "Female");
+		return registeredUser;
 	}
 
 	public static Competition createEvent(int i, UserRepository userRepository) {
@@ -85,8 +83,8 @@ public class RankingApplication {
 		competition.setCity("Göteborg");
 		competition.setLocation("Simhall");
 		competition.setEventType("SM");
-		List<User> users = userRepository.findAll();
-		competition.setUsers(users);
+		List<RegisteredUser> registeredUsers = userRepository.findAll();
+		competition.setUsers(registeredUsers);
 		return competition;
 	}
 
@@ -106,8 +104,8 @@ public class RankingApplication {
 
 	public static void updateResultWithUSer(Long id, ResultRepository resultRepository, UserRepository userRepository) {
 		List<Result> result = resultRepository.findAll();
-		List<User> users = userRepository.findAll();
-		users.forEach(user -> user.setResults(Arrays.asList()));
+		List<RegisteredUser> registeredUsers = userRepository.findAll();
+		registeredUsers.forEach(user -> user.setResults(Arrays.asList()));
 	}
 
 	public static void createQualifier(UserRepository userRepository, QualifierRepository qualifierRepository) {

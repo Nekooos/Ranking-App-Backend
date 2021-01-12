@@ -37,22 +37,22 @@ public class QualifierServiceImpl implements QualifierService {
        TODO change to queries and more entities for each discipline instead
     */
     @Override
-    public List<Set<User>> getQualifiedAndNotQualified(Qualifier qualifier) {
-        List<User> users = userRepository.findAll();
-        Set<User> qualified = new HashSet<>();
-        Set<User> notQualified = new HashSet<>();
+    public List<Set<RegisteredUser>> getQualifiedAndNotQualified(Qualifier qualifier) {
+        List<RegisteredUser> registeredUsers = userRepository.findAll();
+        Set<RegisteredUser> qualified = new HashSet<>();
+        Set<RegisteredUser> notQualified = new HashSet<>();
 
         Function<String, Double> convertTimeToDouble = string ->  utilService.convertStringToSeconds(string);
         Function<String, Double> convertMetersToDouble = Double::parseDouble;
 
         switch (qualifier.getDiscipline().getValue()) {
             case "STA":
-                qualified = getQualified(users, qualifier, convertTimeToDouble);
-                notQualified = getNotQualified(qualified, users);
+                qualified = getQualified(registeredUsers, qualifier, convertTimeToDouble);
+                notQualified = getNotQualified(qualified, registeredUsers);
                 break;
             case "FEN":
-                qualified = getQualified(users, qualifier, convertMetersToDouble);
-                notQualified = getNotQualified(qualified, users);
+                qualified = getQualified(registeredUsers, qualifier, convertMetersToDouble);
+                notQualified = getNotQualified(qualified, registeredUsers);
                 break;
             //more cases
         }
@@ -60,17 +60,17 @@ public class QualifierServiceImpl implements QualifierService {
     }
 
 
-    private Set<User> getQualified(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
-        List<Result> results = filterQualifiedResults(users, qualifier, convertToDouble);
+    private Set<RegisteredUser> getQualified(List<RegisteredUser> registeredUsers, Qualifier qualifier, Function<String, Double> convertToDouble) {
+        List<Result> results = filterQualifiedResults(registeredUsers, qualifier, convertToDouble);
 
-        return users.stream()
+        return registeredUsers.stream()
                 .filter(user -> results.stream()
                         .anyMatch(result -> result.getUserId().equals(user.getId())))
                 .collect(Collectors.toSet());
     }
 
-    private List<Result> filterQualifiedResults(List<User> users, Qualifier qualifier, Function<String, Double> convertToDouble) {
-        return users.stream()
+    private List<Result> filterQualifiedResults(List<RegisteredUser> registeredUsers, Qualifier qualifier, Function<String, Double> convertToDouble) {
+        return registeredUsers.stream()
                 .flatMap(user -> user.getResults()
                         .stream()
                         .filter(result -> convertToDouble.apply(result.getReportedPerformance()) >= convertToDouble.apply(qualifier.getValueToQualify())
@@ -90,9 +90,9 @@ public class QualifierServiceImpl implements QualifierService {
         return !resultDate.isBefore(qualifierStart) && !resultDate.isAfter(qualifierEnd);
     }
 
-    private Set<User> getNotQualified(Set<User> qualifiedUsers, List<User> allUsers) {
-        return allUsers.stream()
-                .filter(user -> !qualifiedUsers.contains(user))
+    private Set<RegisteredUser> getNotQualified(Set<RegisteredUser> qualifiedRegisteredUsers, List<RegisteredUser> allRegisteredUsers) {
+        return allRegisteredUsers.stream()
+                .filter(user -> !qualifiedRegisteredUsers.contains(user))
                 .collect(Collectors.toSet());
     }
 
@@ -109,15 +109,15 @@ public class QualifierServiceImpl implements QualifierService {
 
     @Override
     public Qualifier saveWithAllUsers(Qualifier qualifier) {
-        List<Set<User>> userSets = this.getQualifiedAndNotQualified(qualifier);
+        List<Set<RegisteredUser>> userSets = this.getQualifiedAndNotQualified(qualifier);
         userSets.get(0).forEach(user -> qualifierAnswerRepository.save(createQualifierAnswer(user, qualifier, true)));
         userSets.get(1).forEach(user -> qualifierAnswerRepository.save(createQualifierAnswer(user, qualifier, false)));
         return qualifierRepository.save(qualifier);
     }
 
-    private QualifierAnswer createQualifierAnswer(User user, Qualifier qualifier, boolean isQualified) {
+    private QualifierAnswer createQualifierAnswer(RegisteredUser registeredUser, Qualifier qualifier, boolean isQualified) {
         QualifierAnswer qualifierAnswer = new QualifierAnswer();
-        qualifierAnswer.setUser(user);
+        qualifierAnswer.setUser(registeredUser);
         qualifierAnswer.setQualifier(qualifier);
         qualifierAnswer.setQualified(isQualified);
         return qualifierAnswer;

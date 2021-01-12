@@ -4,16 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import se.ranking.exception.EntityNotFoundException;
-import se.ranking.model.NotRegisteredUser;
-import se.ranking.model.User;
-import se.ranking.model.UserDto;
-import se.ranking.model.UserResultsDto;
+import se.ranking.model.*;
 import se.ranking.service.UserService;
 import se.ranking.service.UtilService;
 
@@ -37,8 +31,8 @@ public class UserController {
 
     @PostMapping("/save")
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto user) {
-        User savedUser = userService.save(user);
-        return ResponseEntity.ok(savedUser);
+        RegisteredUser savedRegisteredUser = userService.save(user);
+        return ResponseEntity.ok(savedRegisteredUser);
     }
 
     @PostMapping("/save-not-registered-user")
@@ -49,32 +43,32 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id) throws EntityNotFoundException {
-        User user = userService.findById(id);
-        return ResponseEntity.ok(user);
+        RegisteredUser registeredUser = userService.findById(id);
+        return ResponseEntity.ok(registeredUser);
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
-        List<User> users = userService.findAll();
-        return ResponseEntity.ok(users);
+        List<RegisteredUser> registeredUsers = userService.findAll();
+        return ResponseEntity.ok(registeredUsers);
     }
 
     @PutMapping("/put")
-    public ResponseEntity<?> editUser(@RequestBody User user, @PathVariable("id") Long id) throws Exception {
-        User editedUser = userService.edit(id, user);
-        return ResponseEntity.ok().body(editedUser);
+    public ResponseEntity<?> editUser(@RequestBody RegisteredUser registeredUser, @PathVariable("id") Long id) throws Exception {
+        RegisteredUser editedRegisteredUser = userService.edit(id, registeredUser);
+        return ResponseEntity.ok().body(editedRegisteredUser);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteUser(@RequestBody User user) {
-        userService.delete(user);
-        return ResponseEntity.ok().body(user.getFirstName() + " " + user.getLastName() + " was deleted");
+    public ResponseEntity<?> deleteUser(@RequestBody RegisteredUser registeredUser) {
+        userService.delete(registeredUser);
+        return ResponseEntity.ok().body(registeredUser.getFirstName() + " " + registeredUser.getLastName() + " was deleted");
     }
 
     @PatchMapping(value = "/patch/{id}", consumes = "application/json-patch+json")
     public ResponseEntity<?> patchUser(@RequestBody JsonPatch jsonPatch, @PathVariable("id") Long id) throws JsonPatchException, JsonProcessingException {
-        User user = userService.patchUser(jsonPatch, id);
-        return ResponseEntity.ok().body(user);
+        RegisteredUser registeredUser = userService.patchUser(jsonPatch, id);
+        return ResponseEntity.ok().body(registeredUser);
 
     }
 }

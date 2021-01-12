@@ -13,31 +13,31 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TestUtil {
-    public List<User> createXUsers(int x, final List<Result> results) {
+    public List<RegisteredUser> createXUsers(int x, final List<Result> results) {
         return IntStream.range(0, x)
                 .mapToObj(i -> createUser(i, results))
                 .collect(Collectors.toList());
     }
 
-    public User createUser(int i, List<Result> results) {
-        User user = new User();
-        user.setId((long) i);
-        user.setFirstName("firstName"+i);
-        user.setLastName("lastName"+i);
-        user.setEmail("test"+i+"@mail.com");
-        user.setPassword("password");
-        user.setGender(i % 2 == 0 ? "Male" : "Female");
-        user.setResults(results);
-        return user;
+    public RegisteredUser createUser(int i, List<Result> results) {
+        RegisteredUser registeredUser = new RegisteredUser();
+        registeredUser.setId((long) i);
+        registeredUser.setFirstName("firstName"+i);
+        registeredUser.setLastName("lastName"+i);
+        registeredUser.setEmail("test"+i+"@mail.com");
+        registeredUser.setPassword("password");
+        registeredUser.setGender(i % 2 == 0 ? "Male" : "Female");
+        registeredUser.setResults(results);
+        return registeredUser;
     }
 
-    public List<Competition> createXCompetitions(int x, List<User> users) {
+    public List<Competition> createXCompetitions(int x, List<RegisteredUser> registeredUsers) {
         return IntStream.range(0, x)
-                .mapToObj(i -> createCompetition(i+1, users))
+                .mapToObj(i -> createCompetition(i+1, registeredUsers))
                 .collect(Collectors.toList());
     }
 
-    public Competition createCompetition(int i, List<User> users) {
+    public Competition createCompetition(int i, List<RegisteredUser> registeredUsers) {
         Competition competition = new Competition();
         competition.setId((long) i);
         competition.setName("SM i Angered Simhall"+i);
@@ -65,20 +65,20 @@ public class TestUtil {
         return simpleDateFormat.format(c.getTime());
     }
 
-    public List<Result> createXResults(int x, final User user) {
+    public List<Result> createXResults(int x, final RegisteredUser registeredUser) {
         return IntStream.range(0, x)
-                .mapToObj(i -> createResult(i+1, user))
+                .mapToObj(i -> createResult(i+1, registeredUser))
                 .collect(Collectors.toList());
     }
 
-    public Result createResult(int x, User user) {
+    public Result createResult(int x, RegisteredUser registeredUser) {
         Result result = new Result();
         result.setId((long) x);
         result.setDiscipline(Discipline.STA);
         result.setAnnouncedPerformance(String.valueOf(randomTimeAndPoints()));
         result.setCard(card(x));
         result.setPoints(randomTimeAndPoints());
-        result.setUser(user);
+        result.setUser(registeredUser);
         result.setReportedPerformance(String.valueOf(randomTimeAndPoints()));
         return result;
     }
@@ -95,7 +95,7 @@ public class TestUtil {
         return result;
     }
 
-    public Competition createCustomCompetition(long id, String city, String country, String date, String endDate, String eventType, String location, String name, List<User> users, List<Result> results) {
+    public Competition createCustomCompetition(long id, String city, String country, String date, String endDate, String eventType, String location, String name, List<RegisteredUser> registeredUsers, List<Result> results) {
         Competition competition = new Competition();
         competition.setId(id);
         competition.setCity(city);
@@ -105,7 +105,7 @@ public class TestUtil {
         competition.setEventType(eventType);
         competition.setLocation(location);
         competition.setName(name);
-        competition.setUsers(users);
+        competition.setUsers(registeredUsers);
         competition.setResults(results);
         return competition;
     }
