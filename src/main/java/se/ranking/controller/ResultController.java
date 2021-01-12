@@ -22,6 +22,12 @@ public class ResultController {
     @Autowired
     private ResultService resultService;
 
+    @PostMapping("/save-competition-result")
+    public ResponseEntity<?> saveResultWithCompetitionAndUser(@Valid @RequestBody Result result, @PathVariable("userId") Long userId, @PathVariable("competitionId") Long competitionId) {
+        Result savedResult = resultService.saveResultWithCompetitionAndUser(result, userId, competitionId);
+        return ResponseEntity.ok(savedResult);
+    }
+
     @GetMapping("/competition-results/{id}")
     public ResponseEntity<?> getCompetitionResultsById(@PathVariable("id") Long id) {
         List<CompetitionResultDto> results = resultService.getCompetitionResultsById(id);

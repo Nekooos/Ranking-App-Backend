@@ -9,9 +9,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
+import se.ranking.model.Competition;
 import se.ranking.model.CompetitionResultDto;
 import se.ranking.model.Result;
+import se.ranking.model.User;
+import se.ranking.repository.CompetitionRepository;
 import se.ranking.repository.ResultRepository;
+import se.ranking.repository.UserRepository;
 
 import java.util.List;
 
@@ -19,6 +23,20 @@ import java.util.List;
 public class ResultServiceImpl implements ResultService {
     @Autowired
     private ResultRepository resultRepository;
+    @Autowired
+    private CompetitionService competitionService;
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public Result saveResultWithCompetitionAndUser(Result result, Long userId, Long competitionId) {
+        User user = userService.findById(userId);
+        Competition competition = competitionService.findById(competitionId);
+        result.setUser(user);
+        result.setCompetition(competition);
+        competitionService.editIfUserDoesNotExists(user, competition);
+        return resultRepository.save(result);
+    }
 
     @Override
     public Result findById(Long id) {

@@ -16,4 +16,5 @@ public interface ResultService {
     Result delete(Result result);
     List<CompetitionResultDto> getCompetitionResultsById(Long id);
     Result patchResult(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
+    Result saveResultWithCompetitionAndUser(Result result, Long userId, Long competitionId);
 }
