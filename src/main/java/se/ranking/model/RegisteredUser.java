@@ -38,11 +38,11 @@ public class RegisteredUser {
     //List<Competition> competitions;
 
     @JsonManagedReference
-    @OneToMany(fetch= FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch= FetchType.LAZY, mappedBy = "registeredUser")
     List<Result> results;
 
-    @OneToMany(mappedBy = "user")
-    Set<QualifierAnswer> qualifierUsers;
+    @OneToMany(fetch= FetchType.LAZY, mappedBy = "registeredUser")
+    Set<QualifierAnswer> qualifierAnswers;
 
     public Long getId() {
         return id;
@@ -109,11 +109,11 @@ public class RegisteredUser {
     }*/
 
     public Set<QualifierAnswer> getQualifierUsers() {
-        return qualifierUsers;
+        return qualifierAnswers;
     }
 
     public void setQualifierUsers(Set<QualifierAnswer> qualifierUsers) {
-        this.qualifierUsers = qualifierUsers;
+        this.qualifierAnswers = qualifierUsers;
     }
 
     public String getClub() {

@@ -21,7 +21,7 @@ public class Qualifier {
     @NotNull(message = "Discipline is required")
     private Discipline discipline;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "qualifier")
     Set<QualifierAnswer> qualifierUsers;
 
     public Long getId() {
