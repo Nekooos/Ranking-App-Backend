@@ -11,11 +11,10 @@ import java.util.List;
 public interface UserService {
     RegisteredUser findById(Long id) throws EntityNotFoundException;
     RegisteredUser save(UserDto user);
-    NotRegisteredUser save(NotRegisteredUser user);
     List<RegisteredUser> findAll();
     RegisteredUser edit(Long id, RegisteredUser registeredUser) throws Exception;
     RegisteredUser delete(RegisteredUser registeredUser);
     RegisteredUser patchUser(JsonPatch jsonPatch, Long id) throws JsonPatchException, JsonProcessingException;
     List<UserResultsDto> getUserResults(Long id);
-    NotRegisteredUser saveNotRegisteredUser(NotRegisteredUser user);
+    RegisteredUser saveNotRegisteredUserDto(NotRegisteredUserDto user);
 }

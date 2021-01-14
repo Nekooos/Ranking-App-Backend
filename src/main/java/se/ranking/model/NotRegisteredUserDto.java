@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-public class NotRegisteredUser {
+public class NotRegisteredUserDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,10 +18,6 @@ public class NotRegisteredUser {
     @NotNull(message = "Gender is required")
     private String gender;
     private String club;
-
-    @JsonManagedReference
-    @OneToMany(fetch= FetchType.LAZY, mappedBy = "notRegisteredUser")
-    List<Result> results;
 
     public Long getId() {
         return id;

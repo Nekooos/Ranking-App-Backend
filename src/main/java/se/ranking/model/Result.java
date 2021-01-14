@@ -43,11 +43,6 @@ public class Result {
     @JoinColumn(name = "userId")
     private RegisteredUser registeredUser;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notRegisteredUserId")
-    private NotRegisteredUser notRegisteredUser;
-
     @JsonBackReference(value = "competition")
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "competitionId")
@@ -147,13 +142,5 @@ public class Result {
 
     public void setCompetition(Competition competition) {
         this.competition = competition;
-    }
-
-    public NotRegisteredUser getNotRegisteredUser() {
-        return notRegisteredUser;
-    }
-
-    public void setNotRegisteredUser(NotRegisteredUser notRegisteredUser) {
-        this.notRegisteredUser = notRegisteredUser;
     }
 }

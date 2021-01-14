@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.*;
-import se.ranking.repository.NotRegisteredUserRepository;
 import se.ranking.repository.UserRepository;
 
 import java.util.List;
@@ -20,8 +19,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    NotRegisteredUserRepository notRegisteredUserRepository;
 
     @Override
     public RegisteredUser findById(Long id) {
@@ -34,12 +31,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(registeredUser);
     }
 
-    public NotRegisteredUser save(NotRegisteredUser user) {
-        boolean userExists = notRegisteredUserRepository.existsById(user.getId());
-        if(!userExists) {
-            return notRegisteredUserRepository.save(user);
-        }
-        return user;
+    public RegisteredUser saveNotRegisteredUserDto(NotRegisteredUserDto user) {
+        RegisteredUser registeredUser = new RegisteredUser();
+        registeredUser.setRegistered(false);
+        registeredUser.setFirstName(user.getFirstName());
+        registeredUser.setLastName(user.getLastName());
+        registeredUser.setGender(user.getGender());
+        registeredUser.setClub(user.getClub());
+        return registeredUser;
     }
 
     @Override
@@ -77,10 +76,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserResults(id);
     }
 
-    @Override
-    public NotRegisteredUser saveNotRegisteredUser(NotRegisteredUser user) {
-        return notRegisteredUserRepository.save(user);
-    }
 
     private RegisteredUser createUserFromUserDto(UserDto userdto) {
         RegisteredUser registeredUser = new RegisteredUser();

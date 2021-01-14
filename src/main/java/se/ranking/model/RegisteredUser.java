@@ -32,6 +32,7 @@ public class RegisteredUser {
     @NotNull(message = "gender is required")
     private String gender;
     private String club;
+    private boolean registered;
 
     //change to set
     //@ManyToMany(mappedBy = "users")
@@ -122,5 +123,21 @@ public class RegisteredUser {
 
     public void setClub(String club) {
         this.club = club;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
+
+    public Set<QualifierAnswer> getQualifierAnswers() {
+        return qualifierAnswers;
+    }
+
+    public void setQualifierAnswers(Set<QualifierAnswer> qualifierAnswers) {
+        this.qualifierAnswers = qualifierAnswers;
     }
 }

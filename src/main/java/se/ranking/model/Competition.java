@@ -21,8 +21,7 @@ public class Competition {
     private String endDate;
     private String eventType;
 
-    //change to set
-    //@ManyToMany(targetEntity = User.class)
+    //TODO change to set
     @ManyToMany
     @JoinTable(
             name = "competition_user",
@@ -30,14 +29,6 @@ public class Competition {
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private List<RegisteredUser> registeredUsers;
-
-    @ManyToMany
-    @JoinTable(
-            name = "competition_not_registered_user",
-            joinColumns = {@JoinColumn(name = "competition_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_id")}
-    )
-    private List<NotRegisteredUser> notRegisteredUsers;
 
     @JsonManagedReference(value = "competition")
     @OneToMany(mappedBy = "competition")
@@ -121,13 +112,5 @@ public class Competition {
 
     public void setResults(List<Result> results) {
         this.results = results;
-    }
-
-    public List<NotRegisteredUser> getNotRegisteredUsers() {
-        return notRegisteredUsers;
-    }
-
-    public void setNotRegisteredUsers(List<NotRegisteredUser> notRegisteredUsers) {
-        this.notRegisteredUsers = notRegisteredUsers;
     }
 }

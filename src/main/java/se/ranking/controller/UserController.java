@@ -23,6 +23,12 @@ public class UserController {
     @Autowired
     private UtilService utilService;
 
+    @PostMapping("/save-not-registered")
+    public ResponseEntity<?> saveNotRegisteredUser(@Valid @RequestBody NotRegisteredUserDto user) {
+        RegisteredUser registeredUser = userService.saveNotRegisteredUserDto(user);
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/user-results/{id}")
     public ResponseEntity<?> getUserResults(@PathVariable("id") Long id) {
         List<UserResultsDto> userResults = userService.getUserResults(id);
@@ -33,12 +39,6 @@ public class UserController {
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto user) {
         RegisteredUser savedRegisteredUser = userService.save(user);
         return ResponseEntity.ok(savedRegisteredUser);
-    }
-
-    @PostMapping("/save-not-registered-user")
-    public ResponseEntity<?> saveNotRegisteredUser(@Valid @RequestBody NotRegisteredUser user) {
-        NotRegisteredUser savedUser = userService.saveNotRegisteredUser(user);
-        return ResponseEntity.ok(savedUser);
     }
 
     @GetMapping("/{id}")

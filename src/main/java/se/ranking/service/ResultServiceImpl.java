@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.*;
-import se.ranking.repository.NotRegisteredUserRepository;
 import se.ranking.repository.ResultRepository;
 import se.ranking.repository.UserRepository;
 
@@ -26,8 +25,6 @@ public class ResultServiceImpl implements ResultService {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
-    @Autowired
-    private NotRegisteredUserRepository notRegisteredUserRepository;
 
     @Override
     public Result saveResultWithCompetitionAndUser(Result result, Long userId, Long competitionId) {
@@ -37,16 +34,6 @@ public class ResultServiceImpl implements ResultService {
         result.setUser(registeredUser);
         result.setCompetition(competition);
         competitionService.editIfUserDoesNotExists(registeredUser, competition);
-        return resultRepository.save(result);
-    }
-
-    @Override
-    public Result saveResultWithNotRegisteredUser(Result result, NotRegisteredUser user, Long competitionId) {
-        userService.save(user);
-        Competition competition = competitionService.findById(competitionId);
-        competitionService.editIfUserDoesNotExists(user, competition);
-        result.setNotRegisteredUser(user);
-        result.setCompetition(competition);
         return resultRepository.save(result);
     }
 
