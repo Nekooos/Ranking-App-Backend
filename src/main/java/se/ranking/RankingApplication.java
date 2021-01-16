@@ -7,10 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import se.ranking.controller.UserController;
 import se.ranking.model.*;
-import se.ranking.repository.CompetitionRepository;
-import se.ranking.repository.QualifierRepository;
-import se.ranking.repository.ResultRepository;
-import se.ranking.repository.UserRepository;
+import se.ranking.model.Record;
+import se.ranking.repository.*;
 import se.ranking.service.CompetitionService;
 import se.ranking.service.ResultService;
 
@@ -29,7 +27,7 @@ public class RankingApplication {
 
 	//testdata
 	@Bean
-	CommandLineRunner init (UserRepository userRepository, CompetitionRepository competitionRepository, ResultRepository resultRepository, CompetitionService competitionService, ResultService resultService, QualifierRepository qualifierRepository, UserController userController){
+	CommandLineRunner init (UserRepository userRepository, CompetitionRepository competitionRepository, ResultRepository resultRepository, CompetitionService competitionService, ResultService resultService, QualifierRepository qualifierRepository, UserController userController, RecordRepository recordRepository){
 		return args -> {
 			IntStream.range(0, 8)
 					.forEach(i -> userRepository.save(createUser(i)));
@@ -47,9 +45,21 @@ public class RankingApplication {
 					.forEach(i -> resultRepository.save(createResult(i, userRepository, competitionRepository)));
 
 			//resultRepository.getUserAndResultByCompetitionId(1L).forEach(r -> System.out.println(r.getCard()+"\t"+r.getAnnounced_performance()+"\t"+r.getFirst_name()));
+
+            saveRecord(recordRepository);
+            createQualifier(userRepository, qualifierRepository);
 		};
 
 	}
+
+	public static void saveRecord(RecordRepository recordRepository) {
+        Record record = new Record();
+        record.setDiscipline(Discipline.STA);
+        record.setId(1L);
+        record.setType("World Record");
+        record.setPerformance("11:00.0");
+        recordRepository.save(record);
+    }
 
 	public static void saveResultToCompetition(CompetitionService competitionService, ResultRepository resultRepository) {
 		List<Competition> competitions = competitionService.findAll();
