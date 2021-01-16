@@ -1,5 +1,7 @@
 package se.ranking.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,10 +14,12 @@ public class QualifierAnswer {
     private boolean qualified;
     private LocalDateTime date;
 
+    @JsonBackReference(value = "userAnswer")
     @ManyToOne
     @JoinColumn(name = "user_id")
     RegisteredUser registeredUser;
 
+    @JsonBackReference(value = "qualifierAnswer")
     @ManyToOne
     @JoinColumn(name = "qualifier_id")
     Qualifier qualifier;

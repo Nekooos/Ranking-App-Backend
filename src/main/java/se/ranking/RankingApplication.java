@@ -94,7 +94,7 @@ public class RankingApplication {
 		result.setAnnouncedPerformance(String.valueOf(randomTimeAndPoints()));
 		result.setCard(card(x));
 		result.setPoints(randomTimeAndPoints());
-		result.setUser(userRepository.findById((long) x+1).get());
+		result.setRegisteredUser(userRepository.findById((long) x+1).get());
 		result.setCompetition(competitionRepository.findById(1L).get());
 		result.setReportedPerformance(String.valueOf(randomTimeAndPoints()));
 		result.setRemarks("remark");

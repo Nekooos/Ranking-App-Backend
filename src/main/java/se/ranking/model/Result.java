@@ -33,12 +33,9 @@ public class Result {
     private Long userId;
 
     @Column(insertable = false, updatable = false)
-    private Long notRegisteredUserId;
-
-    @Column(insertable = false, updatable = false)
     private Long competitionId;
 
-    @JsonBackReference
+    @JsonBackReference(value = "result")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private RegisteredUser registeredUser;
@@ -128,11 +125,11 @@ public class Result {
         this.competitionId = competitionId;
     }
 
-    public RegisteredUser getUser() {
+    public RegisteredUser getRegisteredUser() {
         return registeredUser;
     }
 
-    public void setUser(RegisteredUser registeredUser) {
+    public void setRegisteredUser(RegisteredUser registeredUser) {
         this.registeredUser = registeredUser;
     }
 

@@ -78,7 +78,7 @@ public class TestUtil {
         result.setAnnouncedPerformance(String.valueOf(randomTimeAndPoints()));
         result.setCard(card(x));
         result.setPoints(randomTimeAndPoints());
-        result.setUser(registeredUser);
+        result.setRegisteredUser(registeredUser);
         result.setReportedPerformance(String.valueOf(randomTimeAndPoints()));
         return result;
     }

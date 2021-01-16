@@ -31,7 +31,7 @@ public class ResultServiceImpl implements ResultService {
         RegisteredUser registeredUser = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
         Competition competition = competitionService.findById(competitionId);
-        result.setUser(registeredUser);
+        result.setRegisteredUser(registeredUser);
         result.setCompetition(competition);
         competitionService.editIfUserDoesNotExists(registeredUser, competition);
         return resultRepository.save(result);

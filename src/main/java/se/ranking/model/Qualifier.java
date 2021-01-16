@@ -1,5 +1,7 @@
 package se.ranking.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ public class Qualifier {
     @NotNull(message = "Discipline is required")
     private Discipline discipline;
 
+    @JsonManagedReference(value = "qualifierAnswer")
     @OneToMany(mappedBy = "qualifier")
     Set<QualifierAnswer> qualifierUsers;
 

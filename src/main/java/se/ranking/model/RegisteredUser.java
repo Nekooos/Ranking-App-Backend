@@ -38,11 +38,12 @@ public class RegisteredUser {
     //@ManyToMany(mappedBy = "users")
     //List<Competition> competitions;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "result")
     @OneToMany(fetch= FetchType.LAZY, mappedBy = "registeredUser")
     List<Result> results;
 
-    @OneToMany(fetch= FetchType.LAZY, mappedBy = "registeredUser")
+    @JsonManagedReference(value = "userAnswer")
+    @OneToMany(fetch= FetchType.LAZY, mappedBy = "qualifier")
     Set<QualifierAnswer> qualifierAnswers;
 
     public Long getId() {
