@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ranking.exception.EntityNotFoundException;
 import se.ranking.model.Competition;
-import se.ranking.model.NotRegisteredUserDto;
 import se.ranking.model.RegisteredUser;
 import se.ranking.repository.CompetitionRepository;
 import se.ranking.repository.UserRepository;
@@ -35,20 +34,20 @@ public class CompetitionServiceImpl implements CompetitionService {
         boolean userExists = userExistsInCompetition(registeredUser, competition);
         if(!userExists) {
             List<RegisteredUser> registeredUsers = addUserToCompetition(registeredUser, competition);
-            competition.setUsers(registeredUsers);
+            competition.setRegisteredUsers(registeredUsers);
             this.edit(competition.getId(), competition);
         }
         return competition;
     }
 
     private List<RegisteredUser> addUserToCompetition(final RegisteredUser registeredUser, final Competition competition) {
-        List<RegisteredUser> registeredUsers = competition.getUsers();
+        List<RegisteredUser> registeredUsers = competition.getRegisteredUsers();
         registeredUsers.add(registeredUser);
         return registeredUsers;
     }
 
     private boolean userExistsInCompetition(final RegisteredUser registeredUser, final Competition competition) {
-        return competition.getUsers().stream()
+        return competition.getRegisteredUsers().stream()
                 .anyMatch(competitionUser -> competitionUser.equals(registeredUser));
     }
 

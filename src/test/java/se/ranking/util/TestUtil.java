@@ -48,7 +48,7 @@ public class TestUtil {
         competition.setLocation("Angered Simhall");
         competition.setCity("Göteborg");
         competition.setResults(Collections.emptyList());
-        competition.setUsers(Collections.emptyList());
+        competition.setRegisteredUsers(Collections.emptyList());
         return competition;
     }
 
@@ -105,7 +105,7 @@ public class TestUtil {
         competition.setEventType(eventType);
         competition.setLocation(location);
         competition.setName(name);
-        competition.setUsers(registeredUsers);
+        competition.setRegisteredUsers(registeredUsers);
         competition.setResults(results);
         return competition;
     }
@@ -145,5 +145,14 @@ public class TestUtil {
         userDto.setPassword(password);
         userDto.setGender(gender);
         return userDto;
+    }
+
+    public NotRegisteredUserDto createNotRegisteredUser(long id, String firstName, String lastName, String gender) {
+        NotRegisteredUserDto user = new NotRegisteredUserDto();
+        user.setId(id);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setGender(gender);
+        return user;
     }
 }

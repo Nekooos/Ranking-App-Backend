@@ -98,11 +98,11 @@ public class Competition {
         this.eventType = eventType;
     }
 
-    public List<RegisteredUser> getUsers() {
+    public List<RegisteredUser> getRegisteredUsers() {
         return registeredUsers;
     }
 
-    public void setUsers(List<RegisteredUser> registeredUsers) {
+    public void setRegisteredUsers(List<RegisteredUser> registeredUsers) {
         this.registeredUsers = registeredUsers;
     }
 

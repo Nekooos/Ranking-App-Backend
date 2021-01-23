@@ -46,18 +46,19 @@ public class RankingApplication {
 
 			//resultRepository.getUserAndResultByCompetitionId(1L).forEach(r -> System.out.println(r.getCard()+"\t"+r.getAnnounced_performance()+"\t"+r.getFirst_name()));
 
-            saveRecord(recordRepository);
+            saveRecord(recordRepository, Discipline.STA, 1L, "World record", "11.00.0");
+			saveRecord(recordRepository, Discipline.STA, 2L, "Swedish record", "9.00.0");
             createQualifier(userRepository, qualifierRepository);
 		};
 
 	}
 
-	public static void saveRecord(RecordRepository recordRepository) {
+	public static void saveRecord(RecordRepository recordRepository, Discipline discipline, long id, String type, String performance) {
         Record record = new Record();
-        record.setDiscipline(Discipline.STA);
-        record.setId(1L);
-        record.setType("World Record");
-        record.setPerformance("11:00.0");
+        record.setDiscipline(discipline);
+        record.setId(id);
+        record.setType(type);
+        record.setPerformance(performance);
         recordRepository.save(record);
     }
 
@@ -94,7 +95,7 @@ public class RankingApplication {
 		competition.setLocation("Simhall");
 		competition.setEventType("SM");
 		List<RegisteredUser> registeredUsers = userRepository.findAll();
-		competition.setUsers(registeredUsers);
+		competition.setRegisteredUsers(registeredUsers);
 		return competition;
 	}
 
@@ -125,6 +126,7 @@ public class RankingApplication {
 		qualifier.setId(1L);
 		qualifier.setStartDate("2021-01-01");
 		qualifier.setEndDate("2021-12-31");
+		qualifier.setDiscipline(Discipline.STA);
 		qualifierRepository.save(qualifier);
 	}
 
